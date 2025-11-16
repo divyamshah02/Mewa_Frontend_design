@@ -55,33 +55,55 @@
             z-index: 100;
         }
 
+        /* Updated header to be responsive with hamburger at start, logo center, mode at end */
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
+        }
+
+        .hamburger-btn {
+            order: 1;
         }
 
         .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
+            order: 2;
+        }
+
+        .theme-toggle {
+            order: 3;
+        }
+
+        @media (min-width: 768px) {
+            .header-content {
+                justify-content: space-between;
+            }
+
+            .hamburger-btn {
+                order: 1;
+            }
+
+            .app-title {
+                order: 2;
+
+            }
+
+            .theme-toggle {
+                order: 3;
+            }
         }
 
         .theme-toggle {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 0.5rem;
             cursor: pointer;
             transition: all 0.2s ease;
             width: 40px;
             height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .theme-toggle:hover {
@@ -389,6 +411,25 @@
             overflow: hidden;
         }
 
+        /* Added profit/loss styling for revised tab cards */
+        .revision-card.profit {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
+            border-left: 4px solid var(--accent-buy);
+        }
+
+        .revision-card.profit::before {
+            opacity: 0;
+        }
+
+        .revision-card.loss {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-card) 100%);
+            border-left: 4px solid var(--accent-sell);
+        }
+
+        .revision-card.loss::before {
+            opacity: 0;
+        }
+
         .revision-card::before {
             content: '';
             position: absolute;
@@ -648,19 +689,19 @@
         /* Adding missing tab buttons styling that was lost */
         .custom-tabs {
             position: sticky;
-            top: 57px;
+            top: 5rem;
             z-index: 99;
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
-            padding: 1rem 1rem 0 1rem;
+            padding: 1rem 0.25rem;
             margin-bottom: 1rem;
         }
 
         .tab-buttons {
             display: flex;
             gap: 0.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            /* max-width: 1200px; */
+            /* margin: 0 auto; */
         }
 
         .tab-btn {
@@ -691,8 +732,8 @@
 
         /* Adding greeting section styling */
         .greeting-section {
-            max-width: 1200px;
-            margin: 0 auto;
+            /* max-width: 1200px; */
+            /* margin: 0 auto; */
             padding: 1.5rem 1rem;
         }
 
@@ -965,7 +1006,7 @@
 </head>
 <body data-theme="dark">
     <header class="app-header">
-        <div class="header-content">
+        <!-- <div class="header-content">
             <button class="hamburger-btn" id="hamburgerToggle">
                 <i class="bi bi-list"></i>
             </button>
@@ -973,7 +1014,25 @@
             <button class="theme-toggle" id="themeToggle">
                 <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
             </button>
+        </div> -->
+        <div class="row p-0 m-0 align-items-center">
+            <div class="col p-0 m-0">
+                <button class="hamburger-btn" id="hamburgerToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+
+            <div class="col p-0 m-0 text-center">
+                <h1 class="app-title">Mewa</h1>
+            </div>
+
+            <div class="col p-0 m-0 text-end">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+            </div>
         </div>
+
     </header>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1381,11 +1440,21 @@
             const container = document.getElementById('revisionHistory');
             container.innerHTML = '';
 
-            const filteredRecos = getFilteredRecommendations();
+            const filteredRecos = getFilteredRecommendations().filter(reco => reco.isRevised);
+
+            if (filteredRecos.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p>No revised recommendations</p>
+                    </div>
+                `;
+                return;
+            }
 
             filteredRecos.forEach(reco => {
                 const card = document.createElement('div');
-                card.className = 'revision-card';
+                card.className = `revision-card ${reco.status}`;
 
                 const latestRevision = reco.revisions[reco.revisions.length - 1];
                 const hasMultipleRevisions = reco.revisions.length > 1;
