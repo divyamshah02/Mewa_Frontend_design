@@ -93,51 +93,10 @@
             color: var(--text-primary);
         }
 
-        /* Simplified tab design */
-        .custom-tabs {
-            /* max-width: 1200px; */
-            margin: 1rem auto;
-            padding: 0 1rem;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 0.5rem;
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 0.25rem;
-        }
-
-        .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tab-btn.active {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            box-shadow: 0 1px 3px var(--shadow);
-        }
-
-        /* Cards Container */
-        .cards-container {
-            /* max-width: 1200px; */
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
         /* Clean professional card design */
         .reco-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 1.25rem;
             margin-bottom: 1rem;
@@ -147,7 +106,7 @@
             overflow: hidden;
         }
 
-        /* Added multi-color left border on hover */
+        /* Fixed multi-color left border - always visible, not just on hover */
         .reco-card::before {
             content: '';
             position: absolute;
@@ -156,11 +115,6 @@
             bottom: 0;
             width: 4px;
             background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .reco-card:hover::before {
             opacity: 1;
         }
 
@@ -168,8 +122,45 @@
             box-shadow: 0 4px 12px var(--shadow);
         }
 
-        /* Subtle profit/loss indicators */
+        /* Added stamp-style indicators for revised, profit, and loss */
+        .status-stamp {
+            position: absolute;
+            top: 54%;
+            left: 32%;
+            transform: translateY(-50%) rotate(0deg);
+            padding: 0.5rem 1rem;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 3px dashed;
+            border-radius: 6px;
+            opacity: 0.85;
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .status-stamp.revised-stamp {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            background: var(--bg-card);
+        }
+
+        .status-stamp.profit-stamp {
+            color: var(--accent-buy);
+            border-color: var(--accent-buy);
+            background: var(--bg-card);
+        }
+
+        .status-stamp.loss-stamp {
+            color: var(--accent-sell);
+            border-color: var(--accent-sell);
+            background: var(--bg-card);
+        }
+
+        /* Updated profit/loss card backgrounds with light watermark effect */
         .reco-card.profit {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
             border-left: 4px solid var(--accent-buy);
         }
 
@@ -178,11 +169,30 @@
         }
 
         .reco-card.loss {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-card) 100%);
             border-left: 4px solid var(--accent-sell);
         }
 
         .reco-card.loss::before {
             opacity: 0;
+        }
+
+        /* Added watermark effect for revised cards in active tab */
+        .reco-card.revised-watermark .detail-value .strikethrough::after {
+            content: 'REVISED';
+            position: absolute;
+            top: 50%;
+            left: -40%;
+            right: -40%;
+            transform: translateY(-50%) rotate(-10deg);
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--accent-primary);
+            opacity: 0.25;
+            letter-spacing: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
         }
 
         /* Status badges */
@@ -235,7 +245,6 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            /* margin-bottom: 0.5rem; */
             flex-wrap: wrap;
         }
 
@@ -249,7 +258,6 @@
             display: inline-flex;
             align-items: center;
             background: var(--bg-secondary);
-            /* padding: 0rem 0.6rem; */
             border-radius: 6px;
             font-size: 1rem;
             font-weight: 700;
@@ -259,7 +267,7 @@
         .recommended-time {
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Added space-between to push icon to the end */
+            justify-content: space-between;
             gap: 0.35rem;
             color: var(--text-secondary);
             margin-top: 0.5rem;
@@ -356,9 +364,8 @@
             justify-content: center;
             gap: 0.5rem;
             background: transparent;
-            color: white;
+            /* color: white; */
             border: none;
-            /* padding: 0.75rem; */
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.85rem;
@@ -372,7 +379,7 @@
         /* Revision History - same card design as recommendations */
         .revision-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 1.25rem;
             margin-bottom: 1rem;
@@ -390,11 +397,6 @@
             bottom: 0;
             width: 4px;
             background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .revision-card:hover::before {
             opacity: 1;
         }
 
@@ -419,7 +421,6 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            /* margin-bottom: 0.5rem; */
             flex-wrap: wrap;
         }
 
@@ -433,7 +434,6 @@
             display: inline-flex;
             align-items: center;
             background: var(--bg-secondary);
-            /* padding: 0rem 0.6rem; */
             border-radius: 6px;
             font-size: 1rem;
             font-weight: 700;
@@ -443,7 +443,7 @@
         .revision-time {
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Added space-between to push icon to the end */
+            justify-content: space-between;
             gap: 0.35rem;
             color: var(--text-secondary);
             font-size: 0.8rem;
@@ -473,9 +473,9 @@
         }
 
         /* Updated revision item styling to match card details */
-        .revision-current-prices {
+        /* .revision-current-prices {
             margin-bottom: 1rem;
-        }
+        } */
 
         .revision-price-row {
             display: flex;
@@ -539,9 +539,9 @@
             transition: transform 0.3s ease;
         }
 
-        .history-toggle-btn.expanded i {
+        /* .history-toggle-btn.expanded i {
             transform: rotate(180deg);
-        }
+        } */
 
         /* Collapsible history section */
         .revision-history-section {
@@ -645,6 +645,70 @@
             display: block;
         }
         
+        /* Adding missing tab buttons styling that was lost */
+        .custom-tabs {
+            position: sticky;
+            top: 57px;
+            z-index: 99;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1rem 0 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-primary);
+            color: var(--accent-primary);
+            border-color: var(--border-color);
+            border-bottom: 2px solid var(--accent-primary);
+        }
+
+        /* Adding greeting section styling */
+        .greeting-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        .greeting-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .greeting-subtext {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
         /* Adding bottom navigation bar styles */
         .bottom-nav {
             position: fixed;
@@ -857,13 +921,22 @@
             transition: transform 0.3s ease;
         }
 
-        /* Specific logic for light theme toggle switch */
         [data-theme="light"] .theme-toggle-switch {
-            background: var(--accent-primary); /* Or your preferred light mode active color */
+            background: var(--accent-primary);
         }
         [data-theme="light"] .theme-toggle-switch::after {
             transform: translateX(24px);
-            background: var(--bg-card); /* Or your preferred light mode toggle color */
+            background: var(--bg-card);
+        }
+
+        /* Added horizontal rule between cards for better separation */
+        .card-separator {
+            border: none;
+            height: 2px;
+            background: var(--border-color);
+            margin: 1.5rem auto;
+            opacity: 1;
+            width: 80%;
         }
 
         /* Responsive */
@@ -876,6 +949,10 @@
 
             .reco-card, .revision-card {
                 margin-bottom: 0;
+            }
+
+            .card-separator {
+                display: none;
             }
         }
 
@@ -932,6 +1009,12 @@
         </div>
     </div>
 
+    <!-- Added greeting section styles -->
+    <div class="greeting-section">
+        <h2 class="greeting-text">Good Morning!</h2>
+        <p class="greeting-subtext">Here are your latest stock recommendations.</p>
+    </div>
+
     <div class="custom-tabs">
         <div class="tab-buttons">
             <button class="tab-btn active" data-tab="active">Active Recommendations</button>
@@ -958,7 +1041,7 @@
             <span>Options</span>
         </button>
         <button class="bottom-nav-item" data-category="future">
-            <i class="bi bi-arrow-left-right"></i>
+            <i class="bi bi-bar-chart-line"></i>
             <span>Future</span>
         </button>
     </div>
@@ -974,7 +1057,7 @@
                 stopLoss: "₹2,350",
                 targetPrice: "₹2,800",
                 livePrice: "₹2,820",
-                recommendedAt: "Jan 15, 2024 10:30 AM",
+                recommendedAt: "10:30 AM - Jan 15, 2024",
                 status: "profit",
                 profitAmount: "₹320",
                 isRevised: true,
@@ -995,7 +1078,7 @@
                 stopLoss: "₹3,500",
                 targetPrice: "₹3,900",
                 livePrice: "₹3,680",
-                recommendedAt: "Jan 14, 2024 02:15 PM",
+                recommendedAt: "02:15 PM - Jan 14, 2024",
                 status: "active",
                 isRevised: false,
                 category: "cash",
@@ -1011,7 +1094,7 @@
                 stopLoss: "₹1,550",
                 targetPrice: "₹1,350",
                 livePrice: "₹1,560",
-                recommendedAt: "Jan 13, 2024 11:45 AM",
+                recommendedAt: "11:45 AM - Jan 13, 2024",
                 status: "loss",
                 lossAmount: "₹60",
                 isRevised: true,
@@ -1031,7 +1114,7 @@
                 stopLoss: "₹1,600",
                 targetPrice: "₹1,800",
                 livePrice: "₹1,720",
-                recommendedAt: "Jan 16, 2024 09:00 AM",
+                recommendedAt: "09:00 AM - Jan 16, 2024",
                 status: "active",
                 isRevised: false,
                 category: "cash",
@@ -1047,7 +1130,7 @@
                 stopLoss: "₹450",
                 targetPrice: "₹380",
                 livePrice: "₹415",
-                recommendedAt: "Jan 12, 2024 03:30 PM",
+                recommendedAt: "03:30 PM - Jan 12, 2024",
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹460",
@@ -1068,7 +1151,7 @@
                 stopLoss: "₹100",
                 targetPrice: "₹180",
                 livePrice: "₹145",
-                recommendedAt: "Jan 17, 2024 09:30 AM",
+                recommendedAt: "09:30 AM - Jan 17, 2024",
                 status: "active",
                 isRevised: false,
                 category: "options",
@@ -1084,7 +1167,7 @@
                 stopLoss: "₹240",
                 targetPrice: "₹150",
                 livePrice: "₹190",
-                recommendedAt: "Jan 16, 2024 11:00 AM",
+                recommendedAt: "11:00 AM - Jan 16, 2024",
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹250",
@@ -1103,7 +1186,7 @@
                 stopLoss: "₹18,250",
                 targetPrice: "₹18,750",
                 livePrice: "₹18,520",
-                recommendedAt: "Jan 15, 2024 10:00 AM",
+                recommendedAt: "10:00 AM - Jan 15, 2024",
                 status: "active",
                 isRevised: false,
                 category: "future",
@@ -1119,7 +1202,7 @@
                 stopLoss: "₹42,500",
                 targetPrice: "₹41,500",
                 livePrice: "₹41,800",
-                recommendedAt: "Jan 14, 2024 01:00 PM",
+                recommendedAt: "01:00 PM - Jan 14, 2024",
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹42,600",
@@ -1138,7 +1221,7 @@
                 stopLoss: "₹125",
                 targetPrice: "₹145",
                 livePrice: "₹135",
-                recommendedAt: "Jan 17, 2024 02:30 PM",
+                recommendedAt: "02:30 PM - Jan 17, 2024",
                 status: "active",
                 isRevised: false,
                 category: "cash",
@@ -1211,10 +1294,16 @@
                 const card = document.createElement('div');
                 card.className = `reco-card ${reco.status}`;
 
-                let statusBadgesHTML = '';
+                let stampHTML = '';
                 if (reco.isRevised) {
-                    statusBadgesHTML += '<div class="status-badge revised-badge">Revised</div>';
+                    stampHTML = '<div class="status-stamp revised-stamp">REVISED</div>';
+                } else if (reco.status === 'profit') {
+                    stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
+                } else if (reco.status === 'loss') {
+                    stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
                 }
+
+                let statusBadgesHTML = '';
                 if (reco.status === 'profit') {
                     statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
                 }
@@ -1230,13 +1319,7 @@
                             <div class="script-name-row">
                                 <span class="stock-name">${reco.script}</span>
                             </div>
-                            <span class="live-price">${reco.livePrice}</span>
-                            <div class="recommended-time">
-                                <span>
-                                    <i class="bi bi-clock"></i>
-                                    ${reco.recommendedAt}
-                                </span>
-                            </div>
+                            <span class="live-price">${reco.livePrice}</span>                            
                         </div>
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
@@ -1246,16 +1329,8 @@
                         <div class="buying-zone-value">${reco.buyingPrice}</div>
                     </div>
 
-                    <div class="card-body-custom">
-                        <div class="card-detail">
-                            <span class="detail-label">
-                                <i class="bi bi-shield-x"></i>
-                                Stop Loss
-                            </span>
-                            <span class="detail-value">
-                                ${reco.isRevised && reco.previousStopLoss ? `<span class="strikethrough">${reco.previousStopLoss}</span>` : `${reco.stopLoss}`}                  
-                            </span>
-                        </div>
+                    <div class="card-body-custom" style="position: relative;">
+                        ${stampHTML}
                         <div class="card-detail">
                             <span class="detail-label">
                                 <i class="bi bi-bullseye"></i>
@@ -1265,17 +1340,40 @@
                                 ${reco.isRevised && reco.previousTarget ? `<span class="strikethrough">${reco.previousTarget}</span>` : `${reco.targetPrice}`}                                
                             </span>
                         </div>
+                        <div class="card-detail">
+                            <span class="detail-label">
+                                <i class="bi bi-shield-x"></i>
+                                Stop Loss
+                            </span>
+                            <span class="detail-value">
+                                ${reco.isRevised && reco.previousStopLoss ? `<span class="strikethrough">${reco.previousStopLoss}</span>` : `${reco.stopLoss}`}                  
+                            </span>
+                        </div>
                     </div>
-
+                    <div class="card-detail bg-transparent">
+                        <div class="recommended-time">
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                ${reco.recommendedAt}
+                            </span>
+                        </div>
+                    </div>
+                    
                     ${reco.isRevised ? `
-                        <button class="view-revised-btn" onclick="viewRevisedTab()">
+                        <p class="view-revised-btn mb-0" onclick="viewRevisedTab()">
                             View Revision History
                             <i class="bi bi-arrow-right"></i>
-                        </button>
+                        </p>
                     ` : ''}
                 `;
 
                 container.appendChild(card);
+                
+                if (reco !== filteredRecos[filteredRecos.length - 1]) {
+                    const separator = document.createElement('hr');
+                    separator.className = 'card-separator';
+                    container.appendChild(separator);
+                }
             });
         }
 
@@ -1289,11 +1387,9 @@
                 const card = document.createElement('div');
                 card.className = 'revision-card';
 
-                // Get the latest revision (last item in array)
                 const latestRevision = reco.revisions[reco.revisions.length - 1];
                 const hasMultipleRevisions = reco.revisions.length > 1;
 
-                // Build revision history for collapsible section
                 let revisionsHTML = '';
                 reco.revisions.forEach((rev, index) => {
                     revisionsHTML += `
@@ -1313,7 +1409,6 @@
                     `;
                 });
 
-                // Get original prices for strikethrough
                 const originalRevision = reco.revisions[0];
 
                 card.innerHTML = `
@@ -1322,13 +1417,7 @@
                             <div class="revision-script-row">
                                 <span class="revision-script-name">${reco.script}</span>
                             </div>
-                            <span class="revision-live-price">${reco.livePrice}</span>
-                            <div class="revision-time">
-                                <span>
-                                    <i class="bi bi-clock"></i>
-                                    ${reco.recommendedAt}
-                                </span>
-                            </div>
+                            <span class="revision-live-price">${reco.livePrice}</span>                            
                         </div>
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
@@ -1338,18 +1427,7 @@
                         <div class="revision-buying-value">${reco.buyingPrice}</div>
                     </div>
 
-                    <div class="revision-current-prices">
-                        <div class="revision-price-row">
-                            <span class="revision-price-label">
-                                <i class="bi bi-shield-x"></i>
-                                Stop Loss
-                            </span>
-                            <div class="revision-price-value">
-                                ${hasMultipleRevisions ? `<span class="strikethrough">${originalRevision.stopLoss}</span>` : ''}
-                                ${latestRevision.stopLoss}
-                                ${hasMultipleRevisions && latestRevision.stopLoss !== originalRevision.stopLoss ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Stop Loss</span>` : ''}
-                            </div>
-                        </div>
+                    <div class="revision-current-prices">                        
                         <div class="revision-price-row">
                             <span class="revision-price-label">
                                 <i class="bi bi-bullseye"></i>
@@ -1361,8 +1439,26 @@
                                 ${hasMultipleRevisions && latestRevision.target !== originalRevision.target ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Target</span>` : ''}
                             </div>
                         </div>
+                        <div class="revision-price-row">
+                            <span class="revision-price-label">
+                                <i class="bi bi-shield-x"></i>
+                                Stop Loss
+                            </span>
+                            <div class="revision-price-value">
+                                ${hasMultipleRevisions ? `<span class="strikethrough">${originalRevision.stopLoss}</span>` : ''}
+                                ${latestRevision.stopLoss}
+                                ${hasMultipleRevisions && latestRevision.stopLoss !== originalRevision.stopLoss ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Stop Loss</span>` : ''}
+                            </div>
+                        </div>
                     </div>
-
+                    <div class="card-detail bg-transparent py-0 mb-0">
+                        <div class="recommended-time">
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                ${reco.recommendedAt}
+                            </span>
+                        </div>
+                    </div>
                     ${hasMultipleRevisions ? `
                         <button class="history-toggle-btn" id="history-btn-${reco.id}" onclick="toggleHistory(${reco.id})">
                             <i class="bi bi-clock-history"></i>
@@ -1378,6 +1474,12 @@
                 `;
 
                 container.appendChild(card);
+                
+                if (reco !== filteredRecos[filteredRecos.length - 1]) {
+                    const separator = document.createElement('hr');
+                    separator.className = 'card-separator';
+                    container.appendChild(separator);
+                }
             });
         }
 
@@ -1439,8 +1541,8 @@
         // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
-        const themeSwitch = document.getElementById('themeSwitch'); // Get the theme switch element
-        const sidebarThemeIcon = document.getElementById('sidebarThemeIcon'); // Get the sidebar theme icon
+        const themeSwitch = document.getElementById('themeSwitch');
+        const sidebarThemeIcon = document.getElementById('sidebarThemeIcon');
 
         themeToggle.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
@@ -1449,12 +1551,12 @@
             
             if (newTheme === 'dark') {
                 themeIcon.className = 'bi bi-moon-stars-fill';
-                sidebarThemeIcon.className = 'bi bi-moon-fill'; // Update sidebar icon too
-                themeToggleSwitch.style.transform = 'translateX(0)'; // Reset for dark mode
+                sidebarThemeIcon.className = 'bi bi-moon-fill';
+                themeToggleSwitch.style.transform = 'translateX(0)';
             } else {
                 themeIcon.className = 'bi bi-sun-fill';
-                sidebarThemeIcon.className = 'bi bi-sun-fill'; // Update sidebar icon too
-                themeToggleSwitch.style.transform = 'translateX(24px)'; // Move for light mode
+                sidebarThemeIcon.className = 'bi bi-sun-fill';
+                themeToggleSwitch.style.transform = 'translateX(24px)';
             }
             localStorage.setItem('theme', newTheme);
         });
@@ -1465,11 +1567,9 @@
         if (savedTheme === 'light') {
             themeIcon.className = 'bi bi-sun-fill';
             sidebarThemeIcon.className = 'bi bi-sun-fill';
-            // themeToggleSwitch.style.transform = 'translateX(24px)';
         } else {
             themeIcon.className = 'bi bi-moon-stars-fill';
             sidebarThemeIcon.className = 'bi bi-moon-fill';
-            // themeToggleSwitch.style.transform = 'translateX(0)';
         }
 
         // Sidebar Toggle
@@ -1488,7 +1588,7 @@
             sidebarOverlay.classList.remove('active');
         });
 
-        // Theme toggle in sidebar (This part seems to be a duplicate of the main theme toggle logic, but kept for adherence to the update structure)
+        // Theme toggle in sidebar
         const sidebarThemeToggle = document.getElementById('sidebarThemeToggle');
         sidebarThemeToggle.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
@@ -1496,13 +1596,13 @@
             body.setAttribute('data-theme', newTheme);
             
             if (newTheme === 'dark') {
-                themeIcon.className = 'bi bi-moon-stars-fill'; // Update main theme icon
+                themeIcon.className = 'bi bi-moon-stars-fill';
                 sidebarThemeIcon.className = 'bi bi-moon-fill';
-                themeToggleSwitch.style.transform = 'translateX(0)'; // Reset for dark mode
+                themeToggleSwitch.style.transform = 'translateX(0)';
             } else {
-                themeIcon.className = 'bi bi-sun-fill'; // Update main theme icon
+                themeIcon.className = 'bi bi-sun-fill';
                 sidebarThemeIcon.className = 'bi bi-sun-fill';
-                themeToggleSwitch.style.transform = 'translateX(24px)'; // Move for light mode
+                themeToggleSwitch.style.transform = 'translateX(24px)';
             }
             localStorage.setItem('theme', newTheme);
         });
@@ -1527,7 +1627,5 @@
             renderRevisionHistory();
         });
     </script>
-//last update
 </body>
 </html>
-
