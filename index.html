@@ -25,6 +25,8 @@
             --border-color: #e5e7eb;
             --shadow: rgba(0, 0, 0, 0.05);
             --revised-badge: #f59e0b;
+            --stamp-highlight: rgba(0, 0, 0, 0.08);
+            --stamp-bg: rgba(0, 0, 0, 0.02);
         }
 
         [data-theme="dark"] {
@@ -35,6 +37,8 @@
             --text-secondary: #9ca3af;
             --border-color: #2a2a2a;
             --shadow: rgba(0, 0, 0, 0.3);
+            --stamp-highlight: rgba(255, 255, 255, 0.08);
+            --stamp-bg: rgba(255, 255, 255, 0.03);
         }
         
         body {
@@ -147,37 +151,62 @@
         /* Added stamp-style indicators for revised, profit, and loss */
         .status-stamp {
             position: absolute;
-            top: 54%;
-            left: 32%;
-            transform: translateY(-50%) rotate(0deg);
-            padding: 0.5rem 1rem;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            text-align: center;
+
+            padding: 2rem 0; 
             font-size: 1.25rem;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
-            border: 3px dashed;
             border-radius: 6px;
-            opacity: 0.85;
+            opacity: 0.9;
             z-index: 10;
             pointer-events: none;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            background-color: var(--stamp-bg);
+
+            background:
+                radial-gradient(circle at 0 0,
+                    var(--stamp-highlight) 0,
+                    rgba(0,0,0,0) 70%
+                ),
+                repeating-linear-gradient(
+                    45deg,
+                    var(--stamp-highlight) 0px,
+                    var(--stamp-highlight) 6px,
+                    transparent 6px,
+                    transparent 12px
+                );
+            backdrop-filter: blur(1px);
+
+            mask-image: radial-gradient(circle,
+                rgba(0,0,0,1) 60%,
+                rgba(0,0,0,0.6) 100%
+            );
         }
+
+
+
         .status-stamp.revised-stamp {
             color: var(--accent-primary);
-            border-color: var(--accent-primary);
-            background: var(--bg-card);
+            /* border-color: var(--accent-primary);
+            background: var(--bg-card); */
         }
 
         .status-stamp.profit-stamp {
             color: var(--accent-buy);
-            border-color: var(--accent-buy);
-            background: var(--bg-card);
+            /* border-color: var(--accent-buy);
+            background: var(--bg-card); */
         }
 
         .status-stamp.loss-stamp {
             color: var(--accent-sell);
-            border-color: var(--accent-sell);
-            background: var(--bg-card);
+            /* border-color: var(--accent-sell);
+            background: var(--bg-card); */
         }
 
         /* Updated profit/loss card backgrounds with light watermark effect */
@@ -734,7 +763,7 @@
         .greeting-section {
             /* max-width: 1200px; */
             /* margin: 0 auto; */
-            padding: 1.5rem 1rem;
+            padding: 1.5rem 1rem 0;
         }
 
         .greeting-text {
@@ -761,7 +790,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 0.75rem 1rem;
+            /* padding: 0.75rem 1rem; */
             z-index: 100;
             box-shadow: 0 -2px 10px var(--shadow);
         }
@@ -1061,7 +1090,7 @@
             <div class="theme-switch" id="themeSwitch">
                 <div class="theme-switch-label">
                     <i class="bi bi-moon-fill" id="sidebarThemeIcon"></i>
-                    Dark Mode
+                    Light Mode
                 </div>
                 <div class="theme-toggle-switch" id="sidebarThemeToggle"></div>
             </div>
@@ -1075,6 +1104,7 @@
     </div>
 
     <div class="custom-tabs">
+        <p class="text-end p-0 m-0 mb-1"><u>View Past Performance </u><i class="bi bi-arrow-right"></i> &nbsp;&nbsp;</p>
         <div class="tab-buttons">
             <button class="tab-btn active" data-tab="active">Active Recommendations</button>
             <button class="tab-btn" data-tab="revisions">Revised Recommendations</button>
@@ -1082,7 +1112,7 @@
     </div>
 
     <div class="tab-content-custom active" id="activeTab">
-        <div class="cards-container" id="activeRecommendations"></div>
+        <div class="cards-container px-1" id="activeRecommendations"></div>
     </div>
 
     <div class="tab-content-custom" id="revisionsTab">
@@ -1420,7 +1450,7 @@
                     
                     ${reco.isRevised ? `
                         <p class="view-revised-btn mb-0" onclick="viewRevisedTab()">
-                            View Revision History
+                            View Revised Recommendation
                             <i class="bi bi-arrow-right"></i>
                         </p>
                     ` : ''}
