@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mewa - Stock Recommendations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6c757d;
+            --accent-buy: #10b981;
+            --accent-sell: #ef4444;
+            --accent-primary: #3b82f6;
+            --border-color: #e5e7eb;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --revised-badge: #f59e0b;
+            --stamp-highlight: rgba(0, 0, 0, 0.08);
+            --stamp-bg: rgba(0, 0, 0, 0.02);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border-color: #2a2a2a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --stamp-highlight: rgba(255, 255, 255, 0.08);
+            --stamp-bg: rgba(255, 255, 255, 0.03);
+        }
+        
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            transition: background 0.2s ease, color 0.2s ease;
+            padding-bottom: 80px;
+        }
+
+        /* Clean header without animations */
+        .app-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.25rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Updated header to be responsive with hamburger at start, logo center, mode at end */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hamburger-btn {
+            order: 1;
+        }
+
+        .app-title {
+            order: 2;
+        }
+
+        .theme-toggle {
+            order: 3;
+        }
+
+        @media (min-width: 768px) {
+            .header-content {
+                justify-content: space-between;
+            }
+
+            .hamburger-btn {
+                order: 1;
+            }
+
+            .app-title {
+                order: 2;
+
+            }
+
+            .theme-toggle {
+                order: 3;
+            }
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 40px;
+            height: 40px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--border-color);
+        }
+
+        .theme-toggle i {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        /* Clean professional card design */
+        .reco-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Updated to create gradient border effect on all four corners */
+        .reco-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+            border-radius: 12px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        .reco-card:hover {
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        /* Added stamp-style indicators for revised, profit, and loss */
+        .status-stamp {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            text-align: center;
+            padding: 2.3rem 0; 
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 6px;
+            opacity: 0.9;
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            background-color: var(--stamp-bg);
+            background:
+                radial-gradient(circle at 0 0,
+                    var(--stamp-highlight) 0,
+                    rgba(0,0,0,0) 70%
+                ),
+                repeating-linear-gradient(
+                    45deg,
+                    var(--stamp-highlight) 0px,
+                    var(--stamp-highlight) 6px,
+                    transparent 6px,
+                    transparent 12px
+                );
+            backdrop-filter: blur(1px);
+            mask-image: radial-gradient(circle,
+                rgba(0,0,0,1) 60%,
+                rgba(0,0,0,0.6) 100%
+            );
+        }
+
+
+
+        .status-stamp.revised-stamp {
+            color: var(--accent-primary);
+            /* border-color: var(--accent-primary);
+            background: var(--bg-card); */
+        }
+
+        .status-stamp.profit-stamp {
+            color: var(--accent-buy);
+            /* border-color: var(--accent-buy);
+            background: var(--bg-card); */
+        }
+
+        .status-stamp.loss-stamp {
+            color: var(--accent-sell);
+            /* border-color: var(--accent-sell);
+            background: var(--bg-card); */
+        }
+
+        /* Updated profit/loss card backgrounds with light watermark effect */
+        .reco-card.profit {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
+            border-left: 4px solid var(--accent-buy);
+        }
+
+        .reco-card.profit::before {
+            opacity: 0;
+        }
+
+        .reco-card.loss {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-card) 100%);
+            border-left: 4px solid var(--accent-sell);
+        }
+
+        .reco-card.loss::before {
+            opacity: 0;
+        }
+
+        /* Added watermark effect for revised cards in active tab */
+        .reco-card.revised-watermark .detail-value .strikethrough::after {
+            content: 'REVISED';
+            position: absolute;
+            top: 50%;
+            left: -40%;
+            right: -40%;
+            transform: translateY(-50%) rotate(-10deg);
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--accent-primary);
+            opacity: 0.25;
+            letter-spacing: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        /* Status badges */
+        .status-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .status-badge.profit-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-buy);
+        }
+
+        .status-badge.loss-badge {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-sell);
+        }
+
+        .status-badge.revised-badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+        }
+
+        /* Card header */
+        .card-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 0.75rem;
+        }
+
+        .script-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .script-name-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .stock-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .live-price {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-buy);
+        }
+
+        .recommended-time {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.35rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        /* Professional action badge without animations */
+        .action-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .action-badge.buy {
+            background: var(--accent-buy);
+        }
+
+        .action-badge.sell {
+            background: var(--accent-sell);
+        }
+
+        /* Emphasized buying zone with clean design */
+        .buying-zone {
+            background: rgba(59, 130, 246, 0.08);
+            border: 2px solid var(--accent-primary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .buying-zone-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+        }
+
+        .buying-zone-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        /* Card details */
+        .card-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-detail:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            opacity: 0.6;
+            margin-right: 0.5rem;
+        }
+
+        /* Clean arrow button */
+        .view-revised-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: transparent;
+            /* color: white; */
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+
+        /* Revision History - same card design as recommendations */
+        .revision-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Added profit/loss styling for revised tab cards */
+        .revision-card.profit {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
+            border-left: 4px solid var(--accent-buy);
+        }
+
+        .revision-card.profit::before {
+            opacity: 0;
+        }
+
+        .revision-card.loss {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-card) 100%);
+            border-left: 4px solid var(--accent-sell);
+        }
+
+        .revision-card.loss::before {
+            opacity: 0;
+        }
+
+        /* Added gradient border effect on all four corners for revision cards */
+        .revision-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+            border-radius: 12px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        .revision-card:hover {
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .revision-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 0.75rem;
+        }
+
+        .revision-header-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .revision-script-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .revision-script-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .revision-live-price {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-buy);
+        }
+
+        .revision-time {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .revision-buying-info {
+            background: rgba(59, 130, 246, 0.08);
+            border: 2px solid var(--accent-primary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .revision-buying-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+        }
+
+        .revision-buying-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        /* Updated revision item styling to match card details */
+        /* .revision-current-prices {
+            margin-bottom: 1rem;
+        } */
+
+        .revision-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .revision-price-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .revision-price-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .revised-text {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        /* History toggle button */
+        .history-toggle-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .history-toggle-btn:hover {
+            background: var(--border-color);
+        }
+
+        .history-toggle-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        /* .history-toggle-btn.expanded i {
+            transform: rotate(180deg);
+        } */
+
+        /* Collapsible history section */
+        .revision-history-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .revision-history-section.expanded {
+            max-height: 1000px;
+        }
+
+        /* Simplified timeline without excessive decorations */
+        .revision-timeline {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .revision-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.4rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .revision-item {
+            position: relative;
+            margin-bottom: 1.25rem;
+        }
+
+        .revision-item::before {
+            content: '';
+            position: absolute;
+            left: -1.15rem;
+            top: 0.35rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            border: 2px solid var(--bg-card);
+        }
+
+        .revision-label {
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .revision-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .revision-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+        }
+
+        .revision-row-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .revision-row-value {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* Tab Content */
+        .tab-content-custom {
+            display: none;
+        }
+
+        .tab-content-custom.active {
+            display: block;
+        }
+        
+        /* Adding missing tab buttons styling that was lost */
+        .custom-tabs {
+            position: sticky;
+            top: 3.15rem;
+            z-index: 99;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            /* max-width: 1200px; */
+            /* margin: 0 auto; */
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-primary);
+            color: var(--accent-primary);
+            border-color: var(--border-color);
+            border-bottom: 2px solid var(--accent-primary);
+        }
+
+        /* Adding greeting section styling */
+        .greeting-section {
+            /* max-width: 1200px; */
+            /* margin: 0 auto; */
+            padding: 1.5rem 1rem 0;
+        }
+
+        .greeting-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .greeting-subtext {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Adding bottom navigation bar styles */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            /* padding: 0.75rem 1rem; */
+            z-index: 100;
+            box-shadow: 0 -2px 10px var(--shadow);
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .bottom-nav-item i {
+            font-size: 1.25rem;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .bottom-nav-item:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Adding download icon styling */
+        .download-icon {
+            margin-left: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .download-icon:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Added hamburger menu and sidebar styles */
+        .hamburger-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hamburger-btn i {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            z-index: 999;
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .sidebar-close {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .sidebar-close i {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .sidebar-nav-item i {
+            font-size: 1.25rem;
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .theme-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .theme-switch-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1rem;
+        }
+
+        .theme-switch-label i {
+            font-size: 1.25rem;
+        }
+
+        .theme-toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--bg-secondary);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        [data-theme="light"] .theme-toggle-switch {
+            background: var(--accent-primary);
+        }
+        [data-theme="light"] .theme-toggle-switch::after {
+            transform: translateX(24px);
+            background: var(--bg-card);
+        }
+
+        /* Added horizontal rule between cards for better separation */
+        .card-separator {
+            border: none;
+            height: 2px;
+            background: var(--border-color);
+            margin: 1.5rem auto;
+            opacity: 1;
+            width: 80%;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .cards-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .reco-card, .revision-card {
+                margin-bottom: 0;
+            }
+
+            .card-separator {
+                display: none;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header class="app-header">
+        <!-- <div class="header-content">
+            <button class="hamburger-btn" id="hamburgerToggle">
+                <i class="bi bi-list"></i>
+            </button>
+            <h1 class="app-title">Mewa</h1>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+            </button>
+        </div> -->
+        <div class="row p-0 m-0 align-items-center">
+            <div class="col p-0 m-0">
+                <button class="hamburger-btn" id="hamburgerToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+
+            <div class="col p-0 m-0 text-center">
+                <h1 class="app-title">Mewa</h1>
+            </div>
+
+            <div class="col p-0 m-0 text-end">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+    </header>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="sidebar-content">
+            <a href="#" class="sidebar-nav-item">
+                <i class="bi bi-house-fill"></i>
+                Home
+            </a>
+            <a href="#" class="sidebar-nav-item">
+                <i class="bi bi-bar-chart-fill"></i>
+                Charts
+            </a>
+            <a href="#" class="sidebar-nav-item">
+                <i class="bi bi-download"></i>
+                Download
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <div class="theme-switch" id="themeSwitch">
+                <div class="theme-switch-label">
+                    <i class="bi bi-moon-fill" id="sidebarThemeIcon"></i>
+                    Light Mode
+                </div>
+                <div class="theme-toggle-switch" id="sidebarThemeToggle"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Added greeting section styles -->
+    <div class="greeting-section">
+        <h2 class="greeting-text">Good Morning!</h2>
+        <p class="greeting-subtext">Here are your latest stock recommendations.</p>
+    </div>
+
+    <div class="custom-tabs">
+        <p class="text-end p-0 m-0 mb-1"><u>View Past Performance </u><i class="bi bi-arrow-right"></i> &nbsp;&nbsp;</p>
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="active">Active Recommendations</button>
+            <button class="tab-btn" data-tab="revisions">Revised Recommendations</button>
+        </div>
+    </div>
+
+    <div class="tab-content-custom active" id="activeTab">
+        <div class="cards-container px-1" id="activeRecommendations"></div>
+    </div>
+
+    <div class="tab-content-custom" id="revisionsTab">
+        <div class="cards-container px-1" id="revisionHistory"></div>
+    </div>
+
+    <!-- Adding bottom navigation bar -->
+    <div class="bottom-nav">
+        <button class="bottom-nav-item active" data-category="cash">
+            <i class="bi bi-cash-coin"></i>
+            <span>Cash</span>
+        </button>
+        <button class="bottom-nav-item" data-category="options">
+            <i class="bi bi-graph-up"></i>
+            <span>Options</span>
+        </button>
+        <button class="bottom-nav-item" data-category="future">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>Future</span>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const recommendations = [
+            {
+                id: 1,
+                script: "RELIANCE",
+                action: "buy",
+                buyingPrice: "₹2,450 - ₹2,500",
+                stopLoss: "₹2,350",
+                targetPrice: "₹2,800",
+                livePrice: "₹2,820",
+                recommendedAt: "10:30 AM - Jan 15, 2024",
+                status: "profit",
+                profitAmount: "₹320",
+                isRevised: true,
+                previousStopLoss: "₹2,400",
+                previousTarget: "₹2,700",
+                category: "cash",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹2,400", target: "₹2,700" },
+                    { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750" },
+                    { version: "2nd Revision", stopLoss: "₹2,350", target: "₹2,800" }
+                ]
+            },
+            {
+                id: 2,
+                script: "TCS",
+                action: "buy",
+                buyingPrice: "₹3,600 - ₹3,650",
+                stopLoss: "₹3,500",
+                targetPrice: "₹3,900",
+                livePrice: "₹3,680",
+                recommendedAt: "02:15 PM - Jan 14, 2024",
+                status: "active",
+                isRevised: false,
+                category: "cash",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹3,500", target: "₹3,900" }
+                ]
+            },
+            {
+                id: 3,
+                script: "INFY",
+                action: "sell",
+                buyingPrice: "₹1,480 - ₹1,500",
+                stopLoss: "₹1,550",
+                targetPrice: "₹1,350",
+                livePrice: "₹1,560",
+                recommendedAt: "11:45 AM - Jan 13, 2024",
+                status: "loss",
+                lossAmount: "₹60",
+                isRevised: true,
+                previousStopLoss: "₹1,580",
+                previousTarget: "₹1,400",
+                category: "cash",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹1,580", target: "₹1,400" },
+                    { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350" }
+                ]
+            },
+            {
+                id: 4,
+                script: "HDFC BANK",
+                action: "buy",
+                buyingPrice: "₹1,650 - ₹1,680",
+                stopLoss: "₹1,600",
+                targetPrice: "₹1,800",
+                livePrice: "₹1,720",
+                recommendedAt: "09:00 AM - Jan 16, 2024",
+                status: "active",
+                isRevised: false,
+                category: "cash",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹1,600", target: "₹1,800" }
+                ]
+            },
+            {
+                id: 5,
+                script: "WIPRO",
+                action: "sell",
+                buyingPrice: "₹420 - ₹430",
+                stopLoss: "₹450",
+                targetPrice: "₹380",
+                livePrice: "₹415",
+                recommendedAt: "03:30 PM - Jan 12, 2024",
+                status: "active",
+                isRevised: true,
+                previousStopLoss: "₹460",
+                previousTarget: "₹390",
+                category: "cash",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹460", target: "₹390" },
+                    { version: "1st Revision", stopLoss: "₹455", target: "₹385" },
+                    { version: "2nd Revision", stopLoss: "₹450", target: "₹382" },
+                    { version: "3rd Revision", stopLoss: "₹450", target: "₹380" }
+                ]
+            },
+            {
+                id: 6,
+                script: "NIFTY 18500 CE",
+                action: "buy",
+                buyingPrice: "₹120 - ₹125",
+                stopLoss: "₹100",
+                targetPrice: "₹180",
+                livePrice: "₹145",
+                recommendedAt: "09:30 AM - Jan 17, 2024",
+                status: "active",
+                isRevised: false,
+                category: "options",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹100", target: "₹180" }
+                ]
+            },
+            {
+                id: 7,
+                script: "BANKNIFTY 42000 PE",
+                action: "sell",
+                buyingPrice: "₹200 - ₹210",
+                stopLoss: "₹240",
+                targetPrice: "₹150",
+                livePrice: "₹190",
+                recommendedAt: "11:00 AM - Jan 16, 2024",
+                status: "active",
+                isRevised: true,
+                previousStopLoss: "₹250",
+                previousTarget: "₹160",
+                category: "options",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹250", target: "₹160" },
+                    { version: "1st Revision", stopLoss: "₹240", target: "₹150" }
+                ]
+            },
+            {
+                id: 8,
+                script: "NIFTY FEB FUT",
+                action: "buy",
+                buyingPrice: "₹18,400 - ₹18,450",
+                stopLoss: "₹18,250",
+                targetPrice: "₹18,750",
+                livePrice: "₹18,520",
+                recommendedAt: "10:00 AM - Jan 15, 2024",
+                status: "active",
+                isRevised: false,
+                category: "future",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹18,250", target: "₹18,750" }
+                ]
+            },
+            {
+                id: 9,
+                script: "BANKNIFTY FEB FUT",
+                action: "sell",
+                buyingPrice: "₹42,100 - ₹42,200",
+                stopLoss: "₹42,500",
+                targetPrice: "₹41,500",
+                livePrice: "₹41,800",
+                recommendedAt: "01:00 PM - Jan 14, 2024",
+                status: "active",
+                isRevised: true,
+                previousStopLoss: "₹42,600",
+                previousTarget: "₹41,600",
+                category: "future",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹42,600", target: "₹41,600" },
+                    { version: "1st Revision", stopLoss: "₹42,500", target: "₹41,500" }
+                ]
+            },
+            {
+                id: 10,
+                script: "TATASTEEL",
+                action: "buy",
+                buyingPrice: "₹130 - ₹133",
+                stopLoss: "₹125",
+                targetPrice: "₹145",
+                livePrice: "₹135",
+                recommendedAt: "02:30 PM - Jan 17, 2024",
+                status: "active",
+                isRevised: false,
+                category: "cash",
+                revisions: [
+                    { version: "Initial", stopLoss: "₹125", target: "₹145" }
+                ]
+            }
+        ];
+
+        const expandedHistories = new Set();
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const hamburgerToggle = document.getElementById('hamburgerToggle');
+        const themeToggleSwitch = document.getElementById('themeToggleSwitch');
+        const body = document.body;
+
+        let currentCategory = 'cash';
+
+        function getFilteredRecommendations() {
+            return recommendations.filter(reco => reco.category === currentCategory);
+        }
+
+        function simulatePriceMovement() {
+            recommendations.forEach(reco => {
+                const currentPrice = parseFloat(reco.livePrice.replace(/[₹,]/g, ''));
+                const volatility = 0.002; // 0.2% movement
+                const change = currentPrice * volatility * (Math.random() > 0.5 ? 1 : -1);
+                const newPrice = currentPrice + change;
+                reco.livePrice = `₹${newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            });
+
+            renderActiveRecommendations();
+            renderRevisionHistory();
+            
+            expandedHistories.forEach(recoId => {
+                const historySection = document.getElementById(`history-${recoId}`);
+                const button = document.getElementById(`history-btn-${recoId}`);
+                if (historySection && button) {
+                    historySection.classList.add('expanded');
+                    button.classList.add('expanded');
+                    button.innerHTML = `
+                        <i class="bi bi-clock-history"></i>
+                        Hide History
+                        <i class="bi bi-chevron-up"></i>
+                    `;
+                }
+            });
+        }
+
+        // setInterval(simulatePriceMovement, 1000);
+
+        function renderActiveRecommendations() {
+            const container = document.getElementById('activeRecommendations');
+            container.innerHTML = '';
+
+            const filteredRecos = getFilteredRecommendations();
+
+            if (filteredRecos.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p>No active recommendations</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredRecos.forEach(reco => {
+                const card = document.createElement('div');
+                card.className = `reco-card ${reco.status}`;
+
+                let stampHTML = '';
+                if (reco.isRevised) {
+                    stampHTML = '<div class="status-stamp revised-stamp">REVISED</div>';
+                } else if (reco.status === 'profit') {
+                    stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
+                } else if (reco.status === 'loss') {
+                    stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
+                }
+
+                let statusBadgesHTML = '';
+                if (reco.status === 'profit') {
+                    statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
+                }
+                if (reco.status === 'loss') {
+                    statusBadgesHTML += `<div class="status-badge loss-badge">Stop Loss Hit • ${reco.lossAmount}</div>`;
+                }
+
+                card.innerHTML = `
+                    ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
+                    
+                    <div class="card-header-custom">
+                        <div class="script-info">
+                            <div class="script-name-row">
+                                <span class="stock-name">${reco.script}</span>
+                            </div>
+                            <span class="live-price">${reco.livePrice}</span>                            
+                        </div>
+                        <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                    </div>
+
+                    <div class="buying-zone">
+                        <div class="buying-zone-label">Buying Zone</div>
+                        <div class="buying-zone-value">${reco.buyingPrice}</div>
+                    </div>
+
+                    <div class="card-body-custom" style="position: relative;">
+                        ${stampHTML}
+                        <div class="card-detail">
+                            <span class="detail-label">
+                                <i class="bi bi-bullseye"></i>
+                                Target
+                            </span>
+                            <span class="detail-value">
+                                ${reco.isRevised && reco.previousTarget ? `<span class="strikethrough">${reco.previousTarget}</span>` : `${reco.targetPrice}`}                                
+                            </span>
+                        </div>
+                        <div class="card-detail">
+                            <span class="detail-label">
+                                <i class="bi bi-shield-x"></i>
+                                Stop Loss
+                            </span>
+                            <span class="detail-value">
+                                ${reco.isRevised && reco.previousStopLoss ? `<span class="strikethrough">${reco.previousStopLoss}</span>` : `${reco.stopLoss}`}                  
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-detail bg-transparent">
+                        <div class="recommended-time">
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                ${reco.recommendedAt}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    ${reco.isRevised ? `
+                        <p class="view-revised-btn mb-0" onclick="viewRevisedTab()">
+                            View Revised Recommendation
+                            <i class="bi bi-arrow-right"></i>
+                        </p>
+                    ` : ''}
+                `;
+
+                container.appendChild(card);
+                
+                if (reco !== filteredRecos[filteredRecos.length - 1]) {
+                    const separator = document.createElement('hr');
+                    separator.className = 'card-separator';
+                    container.appendChild(separator);
+                }
+            });
+        }
+
+        function renderRevisionHistory() {
+            const container = document.getElementById('revisionHistory');
+            container.innerHTML = '';
+
+            const filteredRecos = getFilteredRecommendations().filter(reco => reco.isRevised);
+
+            if (filteredRecos.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p>No revised recommendations</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredRecos.forEach(reco => {
+                const card = document.createElement('div');
+                card.className = `revision-card ${reco.status}`;
+
+                const latestRevision = reco.revisions[reco.revisions.length - 1];
+                const hasMultipleRevisions = reco.revisions.length > 1;
+
+                let revisionsHTML = '';
+                reco.revisions.forEach((rev, index) => {
+                    revisionsHTML += `
+                        <div class="revision-item">
+                            <div class="revision-label">${rev.version}</div>
+                            <div class="revision-details">
+                                <div class="revision-row">
+                                    <span class="revision-row-label">Stop Loss</span>
+                                    <span class="revision-row-value">${rev.stopLoss}</span>
+                                </div>
+                                <div class="revision-row">
+                                    <span class="revision-row-label">Target</span>
+                                    <span class="revision-row-value">${rev.target}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const originalRevision = reco.revisions[0];
+
+                card.innerHTML = `
+                    <div class="revision-header">
+                        <div class="revision-header-left">
+                            <div class="revision-script-row">
+                                <span class="revision-script-name">${reco.script}</span>
+                            </div>
+                            <span class="revision-live-price">${reco.livePrice}</span>                            
+                        </div>
+                        <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                    </div>
+
+                    <div class="revision-buying-info">
+                        <div class="revision-buying-label">Buying Zone</div>
+                        <div class="revision-buying-value">${reco.buyingPrice}</div>
+                    </div>
+
+                    <div class="revision-current-prices">                        
+                        <div class="revision-price-row">
+                            <span class="revision-price-label">
+                                <i class="bi bi-bullseye"></i>
+                                Target
+                            </span>
+                            <div class="revision-price-value">
+                                ${hasMultipleRevisions ? `<span class="strikethrough">${originalRevision.target}</span>` : ''}
+                                ${latestRevision.target}
+                                ${hasMultipleRevisions && latestRevision.target !== originalRevision.target ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Target</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="revision-price-row">
+                            <span class="revision-price-label">
+                                <i class="bi bi-shield-x"></i>
+                                Stop Loss
+                            </span>
+                            <div class="revision-price-value">
+                                ${hasMultipleRevisions ? `<span class="strikethrough">${originalRevision.stopLoss}</span>` : ''}
+                                ${latestRevision.stopLoss}
+                                ${hasMultipleRevisions && latestRevision.stopLoss !== originalRevision.stopLoss ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Stop Loss</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-detail bg-transparent py-0 mb-0">
+                        <div class="recommended-time">
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                ${reco.recommendedAt}
+                            </span>
+                        </div>
+                    </div>
+                    ${hasMultipleRevisions ? `
+                        <button class="history-toggle-btn" id="history-btn-${reco.id}" onclick="toggleHistory(${reco.id})">
+                            <i class="bi bi-clock-history"></i>
+                            View Full History
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <div class="revision-history-section" id="history-${reco.id}">
+                            <div class="revision-timeline">
+                                ${revisionsHTML}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+
+                container.appendChild(card);
+                
+                if (reco !== filteredRecos[filteredRecos.length - 1]) {
+                    const separator = document.createElement('hr');
+                    separator.className = 'card-separator';
+                    container.appendChild(separator);
+                }
+            });
+        }
+
+        function getOrdinalSuffix(num) {
+            const suffixes = ['th', 'st', 'nd', 'rd'];
+            const v = num % 100;
+            return suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0];
+        }
+
+        function toggleHistory(recoId) {
+            const historySection = document.getElementById(`history-${recoId}`);
+            const button = document.getElementById(`history-btn-${recoId}`);
+            
+            if (historySection.classList.contains('expanded')) {
+                expandedHistories.delete(recoId);
+                historySection.classList.remove('expanded');
+                button.classList.remove('expanded');
+                button.innerHTML = `
+                    <i class="bi bi-clock-history"></i>
+                    View Full History
+                    <i class="bi bi-chevron-down"></i>
+                `;
+            } else {
+                expandedHistories.add(recoId);
+                historySection.classList.add('expanded');
+                button.classList.add('expanded');
+                button.innerHTML = `
+                    <i class="bi bi-clock-history"></i>
+                    Hide History
+                    <i class="bi bi-chevron-up"></i>
+                `;
+            }
+        }
+
+        function viewRevisedTab() {
+            const revisionsBtn = document.querySelector('[data-tab="revisions"]');
+            revisionsBtn.click();
+        }
+
+        // Tab Switching
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content-custom');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+
+                if (targetTab === 'active') {
+                    document.getElementById('activeTab').classList.add('active');
+                } else if (targetTab === 'revisions') {
+                    document.getElementById('revisionsTab').classList.add('active');
+                }
+            });
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeSwitch = document.getElementById('themeSwitch');
+        const sidebarThemeIcon = document.getElementById('sidebarThemeIcon');
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeIcon.className = 'bi bi-moon-stars-fill';
+                sidebarThemeIcon.className = 'bi bi-moon-fill';
+                themeToggleSwitch.style.transform = 'translateX(0)';
+            } else {
+                themeIcon.className = 'bi bi-sun-fill';
+                sidebarThemeIcon.className = 'bi bi-sun-fill';
+                themeToggleSwitch.style.transform = 'translateX(24px)';
+            }
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'light') {
+            themeIcon.className = 'bi bi-sun-fill';
+            sidebarThemeIcon.className = 'bi bi-sun-fill';
+        } else {
+            themeIcon.className = 'bi bi-moon-stars-fill';
+            sidebarThemeIcon.className = 'bi bi-moon-fill';
+        }
+
+        // Sidebar Toggle
+        hamburgerToggle.addEventListener('click', () => {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Theme toggle in sidebar
+        const sidebarThemeToggle = document.getElementById('sidebarThemeToggle');
+        sidebarThemeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeIcon.className = 'bi bi-moon-stars-fill';
+                sidebarThemeIcon.className = 'bi bi-moon-fill';
+                themeToggleSwitch.style.transform = 'translateX(0)';
+            } else {
+                themeIcon.className = 'bi bi-sun-fill';
+                sidebarThemeIcon.className = 'bi bi-sun-fill';
+                themeToggleSwitch.style.transform = 'translateX(24px)';
+            }
+            localStorage.setItem('theme', newTheme);
+        });
+
+        const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+        bottomNavItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const category = item.getAttribute('data-category');
+                currentCategory = category;
+
+                bottomNavItems.forEach(btn => btn.classList.remove('active'));
+                item.classList.add('active');
+
+                renderActiveRecommendations();
+                renderRevisionHistory();
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderActiveRecommendations();
+            renderRevisionHistory();
+        });
+    </script>
+</body>
+</html>
