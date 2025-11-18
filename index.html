@@ -1358,7 +1358,7 @@
             });
         }
 
-        // setInterval(simulatePriceMovement, 1000);
+        setInterval(simulatePriceMovement, 1000);
 
         function renderActiveRecommendations() {
             const container = document.getElementById('activeRecommendations');
@@ -1405,7 +1405,7 @@
                             <div class="script-name-row">
                                 <span class="stock-name">${reco.script}</span>
                             </div>
-                            <span class="live-price">${reco.livePrice}</span>                            
+                            <span class="live-price">Live Price: ${reco.livePrice}</span>                            
                         </div>
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
@@ -1513,7 +1513,7 @@
                             <div class="revision-script-row">
                                 <span class="revision-script-name">${reco.script}</span>
                             </div>
-                            <span class="revision-live-price">${reco.livePrice}</span>                            
+                            <span class="revision-live-price">Live price: ${reco.livePrice}</span>                            
                         </div>
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
