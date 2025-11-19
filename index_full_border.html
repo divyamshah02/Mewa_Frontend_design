@@ -334,6 +334,7 @@
             letter-spacing: 0.5px;
             flex-shrink: 0;
             color: white;
+            margin-top: 6px;
         }
 
         .action-badge.buy {
@@ -1054,7 +1055,7 @@
             </div>
 
             <div class="col p-0 m-0 text-center">
-                <h1 class="app-title">Mewa</h1>
+                <h1 class="app-title" style="font-size: calc(1.375rem + 0.5vw); margin-bottom: 0px;">The Mewa</h1>
             </div>
 
             <div class="col p-0 m-0 text-end">
@@ -1100,13 +1101,13 @@
     </div>
 
     <!-- Added greeting section styles -->
-    <div class="greeting-section">
+    <!-- <div class="greeting-section">
         <h2 class="greeting-text">Good Morning!</h2>
         <p class="greeting-subtext">Here are your latest stock recommendations.</p>
-    </div>
+    </div> -->
 
     <div class="custom-tabs">
-        <p class="text-end p-0 m-0 mb-1"><u>View Past Performance </u><i class="bi bi-arrow-right"></i> &nbsp;&nbsp;</p>
+        <p class="text-end p-0 m-0 mb-1">Past Performance <i class="bi bi-arrow-right"></i> &nbsp;&nbsp;</p>
         <div class="tab-buttons">
             <button class="tab-btn active" data-tab="active">Active Recommendations</button>
             <button class="tab-btn" data-tab="revisions">Revised Recommendations</button>
@@ -1156,7 +1157,7 @@
                 previousTarget: "₹2,700",
                 category: "cash",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹2,400", target: "₹2,700" },
+                    { version: "Original", stopLoss: "₹2,400", target: "₹2,700" },
                     { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750" },
                     { version: "2nd Revision", stopLoss: "₹2,350", target: "₹2,800" }
                 ]
@@ -1174,7 +1175,7 @@
                 isRevised: false,
                 category: "cash",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹3,500", target: "₹3,900" }
+                    { version: "Original", stopLoss: "₹3,500", target: "₹3,900" }
                 ]
             },
             {
@@ -1193,7 +1194,7 @@
                 previousTarget: "₹1,400",
                 category: "cash",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹1,580", target: "₹1,400" },
+                    { version: "Original", stopLoss: "₹1,580", target: "₹1,400" },
                     { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350" }
                 ]
             },
@@ -1210,7 +1211,7 @@
                 isRevised: false,
                 category: "cash",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹1,600", target: "₹1,800" }
+                    { version: "Original", stopLoss: "₹1,600", target: "₹1,800" }
                 ]
             },
             {
@@ -1228,7 +1229,7 @@
                 previousTarget: "₹390",
                 category: "cash",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹460", target: "₹390" },
+                    { version: "Original", stopLoss: "₹460", target: "₹390" },
                     { version: "1st Revision", stopLoss: "₹455", target: "₹385" },
                     { version: "2nd Revision", stopLoss: "₹450", target: "₹382" },
                     { version: "3rd Revision", stopLoss: "₹450", target: "₹380" }
@@ -1247,7 +1248,7 @@
                 isRevised: false,
                 category: "options",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹100", target: "₹180" }
+                    { version: "Original", stopLoss: "₹100", target: "₹180" }
                 ]
             },
             {
@@ -1265,7 +1266,7 @@
                 previousTarget: "₹160",
                 category: "options",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹250", target: "₹160" },
+                    { version: "Original", stopLoss: "₹250", target: "₹160" },
                     { version: "1st Revision", stopLoss: "₹240", target: "₹150" }
                 ]
             },
@@ -1282,7 +1283,7 @@
                 isRevised: false,
                 category: "future",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹18,250", target: "₹18,750" }
+                    { version: "Original", stopLoss: "₹18,250", target: "₹18,750" }
                 ]
             },
             {
@@ -1300,7 +1301,7 @@
                 previousTarget: "₹41,600",
                 category: "future",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹42,600", target: "₹41,600" },
+                    { version: "Original", stopLoss: "₹42,600", target: "₹41,600" },
                     { version: "1st Revision", stopLoss: "₹42,500", target: "₹41,500" }
                 ]
             },
@@ -1317,7 +1318,7 @@
                 isRevised: false,
                 category: "cash",
                 revisions: [
-                    { version: "Initial", stopLoss: "₹125", target: "₹145" }
+                    { version: "Original", stopLoss: "₹125", target: "₹145" }
                 ]
             }
         ];
@@ -1496,14 +1497,14 @@
                     revisionsHTML += `
                         <div class="revision-item">
                             <div class="revision-label">${rev.version}</div>
-                            <div class="revision-details">
-                                <div class="revision-row">
-                                    <span class="revision-row-label">Stop Loss</span>
-                                    <span class="revision-row-value">${rev.stopLoss}</span>
-                                </div>
+                            <div class="revision-details">                                
                                 <div class="revision-row">
                                     <span class="revision-row-label">Target</span>
                                     <span class="revision-row-value">${rev.target}</span>
+                                </div>
+                                <div class="revision-row">
+                                    <span class="revision-row-label">Stop Loss</span>
+                                    <span class="revision-row-value">${rev.stopLoss}</span>
                                 </div>
                             </div>
                         </div>
