@@ -1719,11 +1719,6 @@
                 card.className = `revision-card ${reco.status}`;
 
                 let stampHTML = '';
-                // if (reco.status === 'profit') {
-                //     stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
-                // } else if (reco.status === 'loss') {
-                //     stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
-                // }
 
                 let statusBadgesHTML = '';
                 if (reco.status === 'profit') {
@@ -1734,8 +1729,43 @@
                 }
 
                 const latestRevision = reco.revisions[reco.revisions.length - 1];
+                const originalRevision = reco.revisions[0];
+                
+                let previousTargetPrice = null;
+                let targetRevisionNumber = 0;
+                for (let i = reco.revisions.length - 2; i >= 0; i--) {
+                    if (reco.revisions[i].target !== latestRevision.target) {
+                        previousTargetPrice = reco.revisions[i].target;
+                        // Count how many times target has been revised (current revision index)
+                        let revisionCount = 0;
+                        for (let j = 1; j <= reco.revisions.length - 1; j++) {
+                            if (reco.revisions[j].target !== reco.revisions[j-1].target) {
+                                revisionCount++;
+                            }
+                        }
+                        targetRevisionNumber = revisionCount;
+                        break;
+                    }
+                }
+                
+                let previousStopLossPrice = null;
+                let stopLossRevisionNumber = 0;
+                for (let i = reco.revisions.length - 2; i >= 0; i--) {
+                    if (reco.revisions[i].stopLoss !== latestRevision.stopLoss) {
+                        previousStopLossPrice = reco.revisions[i].stopLoss;
+                        // Count how many times stop loss has been revised (current revision index)
+                        let revisionCount = 0;
+                        for (let j = 1; j <= reco.revisions.length - 1; j++) {
+                            if (reco.revisions[j].stopLoss !== reco.revisions[j-1].stopLoss) {
+                                revisionCount++;
+                            }
+                        }
+                        stopLossRevisionNumber = revisionCount;
+                        break;
+                    }
+                }
+
                 const hasMultipleRevisions = reco.revisions.length > 1;
-                const previousRevision = hasMultipleRevisions ? reco.revisions[reco.revisions.length - 2] : reco.revisions[0];
 
                 let revisionsHTML = '';
                 reco.revisions.forEach((rev, index) => {
@@ -1758,20 +1788,17 @@
                             <div class="revision-row">
                                 <span class="revision-row-label">Target</span>
                                 <span class="revision-row-value">
-                                    ${prevRev && prevRev.target !== rev.target ? `<span class="old-price">${prevRev.target}</span>` : ''}
-                                    ${isLast ? rev.target : `<span style="text-decoration: line-through;">${rev.target}</span>`}
+                                    ${isLast ? rev.target : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.target}</span>`}
                                 </span>
                             </div>`;
                     }
                     
-                    // Only show stop loss if it was changed or if it's the original
                     if (changedField === 'both' || changedField === 'stopLoss' || index === 0) {
                         revisionsHTML += `
                             <div class="revision-row">
                                 <span class="revision-row-label">Stop Loss</span>
                                 <span class="revision-row-value">
-                                    ${prevRev && prevRev.stopLoss !== rev.stopLoss ? `<span class="old-price">${prevRev.stopLoss}</span>` : ''}
-                                    ${isLast ? rev.stopLoss : `<span style="text-decoration: line-through;">${rev.stopLoss}</span>`}
+                                    ${isLast ? rev.stopLoss : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.stopLoss}</span>`}
                                 </span>
                             </div>`;
                     }
@@ -1781,8 +1808,6 @@
                         </div>
                     `;
                 });
-
-                const originalRevision = reco.revisions[0];
 
                 card.innerHTML = `
                     ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
@@ -1816,9 +1841,9 @@
                                 Target
                             </span>
                             <div class="revision-price-value">
-                                ${hasMultipleRevisions && previousRevision.target !== latestRevision.target ? `<span class="strikethrough">${previousRevision.target}</span>` : ''}
+                                ${previousTargetPrice ? `<span class="strikethrough" style="text-decoration: line-through; opacity: 0.6; margin-right: 0.5rem;">${previousTargetPrice}</span>` : ''}
                                 ${latestRevision.target}
-                                ${hasMultipleRevisions && latestRevision.target !== originalRevision.target ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Target</span>` : ''}
+                                ${previousTargetPrice && targetRevisionNumber > 0 ? `<span class="revised-text">${targetRevisionNumber}${getOrdinalSuffix(targetRevisionNumber)} Revised Target</span>` : ''}
                             </div>
                         </div>
                         <div class="revision-price-row">
@@ -1827,9 +1852,9 @@
                                 Stop Loss
                             </span>
                             <div class="revision-price-value">
-                                ${hasMultipleRevisions && previousRevision.stopLoss !== latestRevision.stopLoss ? `<span class="strikethrough">${previousRevision.stopLoss}</span>` : ''}
+                                ${previousStopLossPrice ? `<span class="strikethrough" style="text-decoration: line-through; opacity: 0.6; margin-right: 0.5rem;">${previousStopLossPrice}</span>` : ''}
                                 ${latestRevision.stopLoss}
-                                ${hasMultipleRevisions && latestRevision.stopLoss !== originalRevision.stopLoss ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Stop Loss</span>` : ''}
+                                ${previousStopLossPrice && stopLossRevisionNumber > 0 ? `<span class="revised-text">${stopLossRevisionNumber}${getOrdinalSuffix(stopLossRevisionNumber)} Revised Stop Loss</span>` : ''}
                             </div>
                         </div>
                     </div>
