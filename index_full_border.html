@@ -309,9 +309,37 @@
             align-items: center;
             background: var(--bg-secondary);
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--accent-buy);
+        }
+
+        /* Added Live tag with blinking red dot and light color label */
+        .live-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent-sell);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-sell);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
         }
 
         .recommended-time {
@@ -522,6 +550,13 @@
             font-size: 0.8rem;
         }
 
+        /* Revision timestamp styling */
+        .revision-timestamp {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
         .revision-buying-info {
             background: rgba(59, 130, 246, 0.08);
             border: 2px solid var(--accent-primary);
@@ -575,6 +610,15 @@
             color: var(--text-primary);
             font-weight: 700;
             text-align: right;
+        }
+
+        /* Styling for strikethrough with light tone in history */
+        .revision-row-value .old-price {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
         }
 
         .revised-text {
@@ -834,6 +878,7 @@
             color: var(--text-secondary);
             cursor: pointer;
             transition: color 0.2s ease;
+            margin-top: 6px;
         }
 
         .download-icon:hover {
@@ -1149,7 +1194,7 @@
                 stopLoss: "₹2,350",
                 targetPrice: "₹2,800",
                 livePrice: "₹2,820",
-                recommendedAt: "10:30 AM - Jan 15, 2024",
+                recommendedAt: "10:30:45 AM - Jan 15, 2024", // Added seconds
                 status: "profit",
                 profitAmount: "₹320",
                 isRevised: true,
@@ -1157,9 +1202,9 @@
                 previousTarget: "₹2,700",
                 category: "cash",
                 revisions: [
-                    { version: "Original", stopLoss: "₹2,400", target: "₹2,700" },
-                    { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750" },
-                    { version: "2nd Revision", stopLoss: "₹2,350", target: "₹2,800" }
+                    { version: "Original", stopLoss: "₹2,400", target: "₹2,700", timestamp: "10:30:45 AM - Jan 15, 2024", changedField: "both" }, // Added timestamps to revisions
+                    { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750", timestamp: "02:15:30 PM - Jan 15, 2024", changedField: "both" },
+                    { version: "2nd Revision", stopLoss: "₹2,350", target: "₹2,800", timestamp: "04:45:12 PM - Jan 15, 2024", changedField: "target" }
                 ]
             },
             {
@@ -1170,12 +1215,12 @@
                 stopLoss: "₹3,500",
                 targetPrice: "₹3,900",
                 livePrice: "₹3,680",
-                recommendedAt: "02:15 PM - Jan 14, 2024",
+                recommendedAt: "02:15:22 PM - Jan 14, 2024", // Added seconds
                 status: "active",
                 isRevised: false,
                 category: "cash",
                 revisions: [
-                    { version: "Original", stopLoss: "₹3,500", target: "₹3,900" }
+                    { version: "Original", stopLoss: "₹3,500", target: "₹3,900", timestamp: "02:15:22 PM - Jan 14, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1186,7 +1231,7 @@
                 stopLoss: "₹1,550",
                 targetPrice: "₹1,350",
                 livePrice: "₹1,560",
-                recommendedAt: "11:45 AM - Jan 13, 2024",
+                recommendedAt: "11:45:08 AM - Jan 13, 2024", // Added seconds
                 status: "loss",
                 lossAmount: "₹60",
                 isRevised: true,
@@ -1194,8 +1239,8 @@
                 previousTarget: "₹1,400",
                 category: "cash",
                 revisions: [
-                    { version: "Original", stopLoss: "₹1,580", target: "₹1,400" },
-                    { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350" }
+                    { version: "Original", stopLoss: "₹1,580", target: "₹1,400", timestamp: "11:45:08 AM - Jan 13, 2024", changedField: "both" },
+                    { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350", timestamp: "03:20:15 PM - Jan 13, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1206,12 +1251,12 @@
                 stopLoss: "₹1,600",
                 targetPrice: "₹1,800",
                 livePrice: "₹1,720",
-                recommendedAt: "09:00 AM - Jan 16, 2024",
+                recommendedAt: "09:00:33 AM - Jan 16, 2024", // Added seconds
                 status: "active",
                 isRevised: false,
                 category: "cash",
                 revisions: [
-                    { version: "Original", stopLoss: "₹1,600", target: "₹1,800" }
+                    { version: "Original", stopLoss: "₹1,600", target: "₹1,800", timestamp: "09:00:33 AM - Jan 16, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1222,17 +1267,17 @@
                 stopLoss: "₹450",
                 targetPrice: "₹380",
                 livePrice: "₹415",
-                recommendedAt: "03:30 PM - Jan 12, 2024",
+                recommendedAt: "03:30:50 PM - Jan 12, 2024", // Added seconds
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹460",
                 previousTarget: "₹390",
                 category: "cash",
                 revisions: [
-                    { version: "Original", stopLoss: "₹460", target: "₹390" },
-                    { version: "1st Revision", stopLoss: "₹455", target: "₹385" },
-                    { version: "2nd Revision", stopLoss: "₹450", target: "₹382" },
-                    { version: "3rd Revision", stopLoss: "₹450", target: "₹380" }
+                    { version: "Original", stopLoss: "₹460", target: "₹390", timestamp: "03:30:50 PM - Jan 12, 2024", changedField: "both" },
+                    { version: "1st Revision", stopLoss: "₹455", target: "₹385", timestamp: "10:15:25 AM - Jan 13, 2024", changedField: "both" },
+                    { version: "2nd Revision", stopLoss: "₹450", target: "₹382", timestamp: "01:45:40 PM - Jan 13, 2024", changedField: "both" },
+                    { version: "3rd Revision", stopLoss: "₹450", target: "₹380", timestamp: "04:30:18 PM - Jan 13, 2024", changedField: "target" }
                 ]
             },
             {
@@ -1243,12 +1288,12 @@
                 stopLoss: "₹100",
                 targetPrice: "₹180",
                 livePrice: "₹145",
-                recommendedAt: "09:30 AM - Jan 17, 2024",
+                recommendedAt: "09:30:12 AM - Jan 17, 2024", // Added seconds
                 status: "active",
                 isRevised: false,
                 category: "options",
                 revisions: [
-                    { version: "Original", stopLoss: "₹100", target: "₹180" }
+                    { version: "Original", stopLoss: "₹100", target: "₹180", timestamp: "09:30:12 AM - Jan 17, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1259,15 +1304,15 @@
                 stopLoss: "₹240",
                 targetPrice: "₹150",
                 livePrice: "₹190",
-                recommendedAt: "11:00 AM - Jan 16, 2024",
+                recommendedAt: "11:00:55 AM - Jan 16, 2024", // Added seconds
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹250",
                 previousTarget: "₹160",
                 category: "options",
                 revisions: [
-                    { version: "Original", stopLoss: "₹250", target: "₹160" },
-                    { version: "1st Revision", stopLoss: "₹240", target: "₹150" }
+                    { version: "Original", stopLoss: "₹250", target: "₹160", timestamp: "11:00:55 AM - Jan 16, 2024", changedField: "both" },
+                    { version: "1st Revision", stopLoss: "₹240", target: "₹150", timestamp: "02:30:20 PM - Jan 16, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1278,12 +1323,12 @@
                 stopLoss: "₹18,250",
                 targetPrice: "₹18,750",
                 livePrice: "₹18,520",
-                recommendedAt: "10:00 AM - Jan 15, 2024",
+                recommendedAt: "10:00:28 AM - Jan 15, 2024", // Added seconds
                 status: "active",
                 isRevised: false,
                 category: "future",
                 revisions: [
-                    { version: "Original", stopLoss: "₹18,250", target: "₹18,750" }
+                    { version: "Original", stopLoss: "₹18,250", target: "₹18,750", timestamp: "10:00:28 AM - Jan 15, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1294,15 +1339,15 @@
                 stopLoss: "₹42,500",
                 targetPrice: "₹41,500",
                 livePrice: "₹41,800",
-                recommendedAt: "01:00 PM - Jan 14, 2024",
+                recommendedAt: "01:00:37 PM - Jan 14, 2024", // Added seconds
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹42,600",
                 previousTarget: "₹41,600",
                 category: "future",
                 revisions: [
-                    { version: "Original", stopLoss: "₹42,600", target: "₹41,600" },
-                    { version: "1st Revision", stopLoss: "₹42,500", target: "₹41,500" }
+                    { version: "Original", stopLoss: "₹42,600", target: "₹41,600", timestamp: "01:00:37 PM - Jan 14, 2024", changedField: "both" },
+                    { version: "1st Revision", stopLoss: "₹42,500", target: "₹41,500", timestamp: "03:45:52 PM - Jan 14, 2024", changedField: "both" }
                 ]
             },
             {
@@ -1313,12 +1358,12 @@
                 stopLoss: "₹125",
                 targetPrice: "₹145",
                 livePrice: "₹135",
-                recommendedAt: "02:30 PM - Jan 17, 2024",
+                recommendedAt: "02:30:44 PM - Jan 17, 2024", // Added seconds
                 status: "active",
                 isRevised: false,
                 category: "cash",
                 revisions: [
-                    { version: "Original", stopLoss: "₹125", target: "₹145" }
+                    { version: "Original", stopLoss: "₹125", target: "₹145", timestamp: "02:30:44 PM - Jan 17, 2024", changedField: "both" }
                 ]
             }
         ];
@@ -1389,11 +1434,12 @@
                 let stampHTML = '';
                 if (reco.isRevised) {
                     stampHTML = '<div class="status-stamp revised-stamp">REVISED</div>';
-                } else if (reco.status === 'profit') {
-                    stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
-                } else if (reco.status === 'loss') {
-                    stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
                 }
+                //  else if (reco.status === 'profit') {
+                //     stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
+                // } else if (reco.status === 'loss') {
+                //     stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
+                // }
 
                 let statusBadgesHTML = '';
                 if (reco.status === 'profit') {
@@ -1411,7 +1457,13 @@
                             <div class="script-name-row">
                                 <span class="stock-name">${reco.script}</span>
                             </div>
-                            <span class="live-price">${reco.livePrice}</span>                            
+                            <div class="script-name-row">
+                                <span class="live-price">${reco.livePrice}</span>
+                                <span class="live-tag">
+                                    <span class="live-dot"></span>
+                                    Live
+                                </span>
+                            </div>
                         </div>
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
@@ -1449,6 +1501,7 @@
                                 ${reco.recommendedAt}
                             </span>
                         </div>
+                        <i class="bi bi-download download-icon"></i>
                     </div>
                     
                     ${reco.isRevised ? `
@@ -1489,23 +1542,65 @@
                 const card = document.createElement('div');
                 card.className = `revision-card ${reco.status}`;
 
+                let stampHTML = '';
+                // if (reco.status === 'profit') {
+                //     stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
+                // } else if (reco.status === 'loss') {
+                //     stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
+                // }
+
+                let statusBadgesHTML = '';
+                if (reco.status === 'profit') {
+                    statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
+                }
+                if (reco.status === 'loss') {
+                    statusBadgesHTML += `<div class="status-badge loss-badge">Stop Loss Hit • ${reco.lossAmount}</div>`;
+                }
+
                 const latestRevision = reco.revisions[reco.revisions.length - 1];
                 const hasMultipleRevisions = reco.revisions.length > 1;
+                const previousRevision = hasMultipleRevisions ? reco.revisions[reco.revisions.length - 2] : reco.revisions[0];
 
                 let revisionsHTML = '';
                 reco.revisions.forEach((rev, index) => {
+                    const prevRev = index > 0 ? reco.revisions[index - 1] : null;
+                    const isLast = index === reco.revisions.length - 1;
+                    const changedField = rev.changedField || 'both';
+                    
                     revisionsHTML += `
                         <div class="revision-item">
                             <div class="revision-label">${rev.version}</div>
-                            <div class="revision-details">                                
-                                <div class="revision-row">
-                                    <span class="revision-row-label">Target</span>
-                                    <span class="revision-row-value">${rev.target}</span>
-                                </div>
-                                <div class="revision-row">
-                                    <span class="revision-row-label">Stop Loss</span>
-                                    <span class="revision-row-value">${rev.stopLoss}</span>
-                                </div>
+                            <div class="revision-timestamp">
+                                <i class="bi bi-clock"></i>
+                                ${rev.timestamp}
+                            </div>
+                            <div class="revision-details">`;
+                    
+                    // Only show target if it was changed or if it's the original
+                    if (changedField === 'both' || changedField === 'target' || index === 0) {
+                        revisionsHTML += `
+                            <div class="revision-row">
+                                <span class="revision-row-label">Target</span>
+                                <span class="revision-row-value">
+                                    ${prevRev && prevRev.target !== rev.target ? `<span class="old-price">${prevRev.target}</span>` : ''}
+                                    ${isLast ? rev.target : `<span style="text-decoration: line-through;">${rev.target}</span>`}
+                                </span>
+                            </div>`;
+                    }
+                    
+                    // Only show stop loss if it was changed or if it's the original
+                    if (changedField === 'both' || changedField === 'stopLoss' || index === 0) {
+                        revisionsHTML += `
+                            <div class="revision-row">
+                                <span class="revision-row-label">Stop Loss</span>
+                                <span class="revision-row-value">
+                                    ${prevRev && prevRev.stopLoss !== rev.stopLoss ? `<span class="old-price">${prevRev.stopLoss}</span>` : ''}
+                                    ${isLast ? rev.stopLoss : `<span style="text-decoration: line-through;">${rev.stopLoss}</span>`}
+                                </span>
+                            </div>`;
+                    }
+                    
+                    revisionsHTML += `
                             </div>
                         </div>
                     `;
@@ -1514,12 +1609,20 @@
                 const originalRevision = reco.revisions[0];
 
                 card.innerHTML = `
+                    ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
+                    
                     <div class="revision-header">
                         <div class="revision-header-left">
                             <div class="revision-script-row">
                                 <span class="revision-script-name">${reco.script}</span>
                             </div>
-                            <span class="revision-live-price">${reco.livePrice}</span>                            
+                            <div class="revision-script-row">
+                                <span class="revision-live-price">${reco.livePrice}</span>
+                                <span class="live-tag">
+                                    <span class="live-dot"></span>
+                                    Live
+                                </span>
+                            </div>
                         </div>
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
@@ -1529,14 +1632,15 @@
                         <div class="revision-buying-value">${reco.buyingPrice}</div>
                     </div>
 
-                    <div class="revision-current-prices">                        
+                    <div class="revision-current-prices" style="position: relative;">
+                        ${stampHTML}
                         <div class="revision-price-row">
                             <span class="revision-price-label">
                                 <i class="bi bi-bullseye"></i>
                                 Target
                             </span>
                             <div class="revision-price-value">
-                                ${hasMultipleRevisions ? `<span class="strikethrough">${originalRevision.target}</span>` : ''}
+                                ${hasMultipleRevisions && previousRevision.target !== latestRevision.target ? `<span class="strikethrough">${previousRevision.target}</span>` : ''}
                                 ${latestRevision.target}
                                 ${hasMultipleRevisions && latestRevision.target !== originalRevision.target ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Target</span>` : ''}
                             </div>
@@ -1547,19 +1651,20 @@
                                 Stop Loss
                             </span>
                             <div class="revision-price-value">
-                                ${hasMultipleRevisions ? `<span class="strikethrough">${originalRevision.stopLoss}</span>` : ''}
+                                ${hasMultipleRevisions && previousRevision.stopLoss !== latestRevision.stopLoss ? `<span class="strikethrough">${previousRevision.stopLoss}</span>` : ''}
                                 ${latestRevision.stopLoss}
                                 ${hasMultipleRevisions && latestRevision.stopLoss !== originalRevision.stopLoss ? `<span class="revised-text">${reco.revisions.length - 1}${getOrdinalSuffix(reco.revisions.length - 1)} Revised Stop Loss</span>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="card-detail bg-transparent py-0 mb-0">
-                        <div class="recommended-time">
+                        <div class="revision-time">
                             <span>
                                 <i class="bi bi-clock"></i>
                                 ${reco.recommendedAt}
                             </span>
                         </div>
+                        <i class="bi bi-download download-icon"></i>
                     </div>
                     ${hasMultipleRevisions ? `
                         <button class="history-toggle-btn" id="history-btn-${reco.id}" onclick="toggleHistory(${reco.id})">
