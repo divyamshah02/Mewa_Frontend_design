@@ -20,7 +20,8 @@
             --text-primary: #1a1a1a;
             --text-secondary: #6c757d;
             --accent-buy: #10b981;
-            --accent-sell: #ef4444;
+            /* --accent-sell: #ef4444; */
+            --accent-sell: #f87171;
             --accent-primary: #3b82f6;
             --border-color: #e5e7eb;
             --shadow: rgba(0, 0, 0, 0.05);
@@ -360,12 +361,6 @@
             50% { transform: scale(1.05); }
         }
 
-        .status-badge.profit-badge::before {
-            content: '🎉';
-            font-size: 1.1rem;
-            /* animation: rotate 2s linear infinite; */
-        }
-
         @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -382,11 +377,6 @@
         .status-badge.loss-badge::before {
             content: '📊';
             font-size: 1.1rem;
-        }
-
-        .status-badge.revised-badge {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-primary);
         }
 
         /* Card header */
@@ -730,7 +720,7 @@
         .revision-timestamp {
             font-size: 0.7rem;
             color: var(--text-secondary);
-            margin-top: 0.25rem;
+            margin-top: 0; /* CHANGE: Remove top margin so timestamp stays inline */
         }
 
         .revision-buying-info {
@@ -881,12 +871,16 @@
             border: 2px solid var(--bg-card);
         }
 
+        /* CHANGE: Update layout to flex for inline date/time */
         .revision-label {
             font-size: 0.85rem;
             color: var(--accent-primary);
             font-weight: 700;
-            margin-bottom: 0.5rem;
             text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
 
         .revision-details {
@@ -1773,12 +1767,17 @@
                     const isLast = index === reco.revisions.length - 1;
                     const changedField = rev.changedField || 'both';
                     
+                    const isLatestTarget = rev.target === latestRevision.target;
+                    const isLatestStopLoss = rev.stopLoss === latestRevision.stopLoss;
+                    
                     revisionsHTML += `
                         <div class="revision-item">
-                            <div class="revision-label">${rev.version}</div>
-                            <div class="revision-timestamp">
-                                <i class="bi bi-clock"></i>
-                                ${rev.timestamp}
+                            <div class="revision-label">
+                                <span>${rev.version}</span>
+                                <span class="revision-timestamp">
+                                    <i class="bi bi-clock"></i>
+                                    ${rev.timestamp}
+                                </span>
                             </div>
                             <div class="revision-details">`;
                     
@@ -1788,7 +1787,8 @@
                             <div class="revision-row">
                                 <span class="revision-row-label">Target</span>
                                 <span class="revision-row-value">
-                                    ${isLast ? rev.target : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.target}</span>`}
+                                    ${prevRev ? `<span style="font-size: 0.8rem; opacity: 0.5; text-decoration: line-through; margin-right: 0.5rem;">${prevRev.target}</span>` : ''}
+                                    ${isLatestTarget ? rev.target : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.target}</span>`}
                                 </span>
                             </div>`;
                     }
@@ -1798,7 +1798,8 @@
                             <div class="revision-row">
                                 <span class="revision-row-label">Stop Loss</span>
                                 <span class="revision-row-value">
-                                    ${isLast ? rev.stopLoss : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.stopLoss}</span>`}
+                                    ${prevRev ? `<span style="font-size: 0.8rem; opacity: 0.5; text-decoration: line-through; margin-right: 0.5rem;">${prevRev.stopLoss}</span>` : ''}
+                                    ${isLatestStopLoss ? rev.stopLoss : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.stopLoss}</span>`}
                                 </span>
                             </div>`;
                     }
