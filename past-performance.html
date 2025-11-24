@@ -25,6 +25,8 @@
             --border-color: #e5e7eb;
             --shadow: rgba(0, 0, 0, 0.05);
             --revised-badge: #f59e0b;
+            --bg-tertiary: #e0e0e0; /* Added for hover states in buttons */
+            --border: #e0e0e0; /* Added for general borders */
         }
 
         [data-theme="dark"] {
@@ -35,6 +37,8 @@
             --text-secondary: #9ca3af;
             --border-color: #2a2a2a;
             --shadow: rgba(0, 0, 0, 0.3);
+            --bg-tertiary: #2a2a2a; /* Dark theme equivalent */
+            --border: #3a3a3a; /* Dark theme equivalent */
         }
         
         body {
@@ -45,42 +49,71 @@
             padding-bottom: 80px;
         }
 
+        td, th {
+            background-color: var(--bg-primary) !important;
+            border: solid 4px var(--border-color) !important;
+        }
+
+        /* Updated header styling to match index.html */
+       /* Clean header without animations */
         .app-header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border-color);
-            padding: 1rem;
+            padding: 0.25rem 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
+        /* Updated header to be responsive with hamburger at start, logo center, mode at end */
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
+        }
+
+        .hamburger-btn {
+            order: 1;
         }
 
         .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
+            order: 2;
+        }
+
+        .theme-toggle {
+            order: 3;
+        }
+
+        @media (min-width: 768px) {
+            .header-content {
+                justify-content: space-between;
+            }
+
+            .hamburger-btn {
+                order: 1;
+            }
+
+            .app-title {
+                order: 2;
+
+            }
+
+            .theme-toggle {
+                order: 3;
+            }
         }
 
         .theme-toggle {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 0.5rem;
             cursor: pointer;
             transition: all 0.2s ease;
             width: 40px;
             height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .theme-toggle:hover {
@@ -91,6 +124,28 @@
             font-size: 1.1rem;
             color: var(--text-primary);
         }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hamburger-btn {
+            order: 1;
+        }
+
+        .app-title {
+            order: 2;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
 
         /* Hamburger and Sidebar */
         .hamburger-btn {
@@ -268,6 +323,60 @@
             color: var(--text-primary);
         }
 
+        /* Tab Buttons */
+        .custom-tabs {
+            position: sticky;
+            top: 3.15rem;
+            z-index: 99;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-primary);
+            color: var(--accent-primary);
+            border-color: var(--border-color);
+            border-bottom: 2px solid var(--accent-primary);
+        }
+
+        /* Tab Content */
+        .tab-content-custom {
+            display: none;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 1rem auto;
+        }
+
+        .tab-content-custom.active {
+            display: block;
+        }
+
         /* Cards Container */
         .cards-container {
             margin: 0 auto;
@@ -277,7 +386,6 @@
         /* Performance Card */
         .performance-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 1.25rem;
             margin-bottom: 1rem;
@@ -285,22 +393,19 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
         }
 
         .performance-card::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .performance-card:hover::before {
+            inset: 0;
+            padding: 3px;
+            background: linear-gradient(135deg, #f59e0b, #ec4899, #8b5cf6, #3b82f6);
+            border-radius: 12px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
             opacity: 1;
         }
 
@@ -309,19 +414,72 @@
         }
 
         .performance-card.profit {
-            border-left: 4px solid var(--accent-buy);
+            background: linear-gradient(135deg, 
+                rgba(16, 185, 129, 0.15) 0%, 
+                rgba(52, 211, 153, 0.08) 50%,
+                var(--bg-card) 100%);
+            border: 2px solid var(--accent-buy);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25);
         }
 
         .performance-card.profit::before {
             opacity: 0;
         }
 
+        .performance-card.profit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(16, 185, 129, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
         .performance-card.loss {
-            border-left: 4px solid var(--accent-sell);
+            background: linear-gradient(135deg, 
+                rgba(239, 68, 68, 0.15) 0%, 
+                rgba(248, 113, 113, 0.08) 50%,
+                var(--bg-card) 100%);
+            border: 2px solid var(--accent-sell);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.25);
         }
 
         .performance-card.loss::before {
             opacity: 0;
+        }
+
+        .performance-card.loss::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(239, 68, 68, 0.08) 0%,
+                transparent 70%
+            );
+            animation: pulse 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
         }
 
         /* Card Header */
@@ -631,11 +789,375 @@
                 grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
             }
         }
+
+        /* New styles for Tabular and Individual view */
+        .action-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: white;
+        }
+        .action-badge.buy { background-color: var(--accent-buy); }
+        .action-badge.sell { background-color: var(--accent-sell); }
+
+        .live-price-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .live-price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--accent-buy);
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-buy);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .glassmorphic-status-card {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .glassmorphic-status-card.profit {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .glassmorphic-status-card.loss {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .glassmorphic-status-card i {
+            font-size: 1.2rem;
+            color: white;
+        }
+        .glassmorphic-status-card .status-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .rotating-glow-border {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 12px;
+            background: conic-gradient(from 0deg, var(--accent-buy), var(--accent-sell));
+            z-index: -1;
+            animation: rotate 10s linear infinite;
+            opacity: 0.8;
+        }
+        .rotating-glow-border.loss {
+             background: conic-gradient(from 0deg, var(--accent-sell), var(--accent-buy));
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .view-revised-btn {
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .view-revised-btn i {
+            transition: transform 0.3s ease;
+        }
+        .view-revised-btn.expanded i {
+            transform: rotate(180deg);
+        }
+
+        .collapsed {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .card-body-custom {
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* CHANGE: Adding completion box styling for profit/loss cards */
+        .completion-box {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-buy);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-buy);
+        }
+
+        .completion-box.loss-box {
+            border-color: var(--accent-sell);
+            color: var(--accent-sell);
+        }
+
+        /* CHANGE: Adding floating status badge for completed cards */
+        .floating-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+            z-index: 10;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            animation: floatUpDown 2s ease-in-out infinite;
+        }
+
+        @keyframes floatUpDown {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .profit-status {
+            background: linear-gradient(135deg, var(--accent-buy), rgba(16, 185, 129, 0.7));
+        }
+
+        .loss-status {
+            background: linear-gradient(135deg, var(--accent-sell), rgba(239, 68, 68, 0.7));
+        }
+
+        .floating-status i {
+            font-size: 1rem;
+        }
+
+        /* CHANGE: Adding rotating border glow effect for completed cards */
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .performance-card.profit .rotating-border,
+        .performance-card.loss .rotating-border {
+            position: absolute;
+            inset: -4px;
+            border-radius: 12px;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                var(--accent-buy) 25%,
+                transparent 50%,
+                var(--accent-buy) 75%,
+                transparent 100%
+            );
+            animation: borderRotate 3s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .performance-card.loss .rotating-border {
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                var(--accent-sell) 25%,
+                transparent 50%,
+                var(--accent-sell) 75%,
+                transparent 100%
+            );
+        }
+
+        /* CHANGE: Adding collapsible content styling */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.expanded {
+            max-height: 2000px;
+        }
+
+        /* CHANGE: Adding show more button styling */
+        .show-more-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border); /* Use --border for consistency */
+            border-radius: 8px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .show-more-btn:hover {
+            background: var(--bg-tertiary); /* Use --bg-tertiary for hover */
+            border-color: var(--accent-primary);
+        }
+
+        .show-more-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .show-more-btn.expanded i {
+            transform: rotate(180deg);
+        }
+
+        /* CHANGE: Adding card detail styling for exit information */
+        .exit-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .exit-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .exit-detail-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .exit-detail-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .exit-detail-value.profit {
+            color: var(--accent-buy);
+        }
+
+        .exit-detail-value.loss {
+            color: var(--accent-sell);
+        }
+
+        /* CHANGE: Adding revision history styling */
+        .revision-history {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border); /* Use --border */
+        }
+
+        .revision-item {
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .revision-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .revision-timestamp {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .revision-details {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .revision-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .previous-price {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* CHANGE: Adding view history button styling */
+        .view-history-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border); /* Use --border */
+            border-radius: 8px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .view-history-btn:hover {
+            background: var(--bg-tertiary); /* Use --bg-tertiary */
+            border-color: var(--accent-primary);
+        }
+
     </style>
 </head>
 <body data-theme="dark">
     <header class="app-header">
-        <div class="header-content">
+        <!-- <div class="header-content">
             <button class="hamburger-btn" id="hamburgerToggle">
                 <i class="bi bi-list"></i>
             </button>
@@ -643,7 +1165,31 @@
             <button class="theme-toggle" id="themeToggle">
                 <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
             </button>
+        </div> -->
+        <div class="row p-0 m-0 align-items-center">
+            <div class="col p-0 m-0">
+                <button class="hamburger-btn" id="hamburgerToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+
+            <div class="col p-0 m-0 text-center text-nowrap">
+                <!-- Added logo image before The Mewa text -->
+                <h1 class="app-title" style="font-size: calc(1.375rem + 0.5vw); margin-bottom: 0px;">
+                    <img src="mewa_logo.png" 
+                         alt="Mewa Logo" 
+                         style="height: 21px; width: auto; vertical-align: middle;">
+                    The Mewa
+                </h1>
+            </div>
+
+            <div class="col p-0 m-0 text-end">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+            </div>
         </div>
+
     </header>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -683,7 +1229,41 @@
         <h2>Past Performance</h2>
     </div>
 
-    <div class="cards-container" id="performanceContainer"></div>
+    <!-- Tabular and Individual Tabs -->
+    <div class="custom-tabs">
+        <p class="text-end p-0 m-0 mb-1">Past Performance <i class="bi bi-arrow-right"></i> &nbsp;&nbsp;</p>
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="tabular">Tabular</button>
+            <button class="tab-btn" data-tab="individual">Individual</button>
+        </div>
+    </div>
+
+    <!-- Tab Content: Tabular -->
+    <div class="tab-content-custom active" id="tabularTab">
+        <div class="cards-container px-1">
+            <div style="overflow-x: auto;">
+                <table class="table table-responsive" id="tabularTable" style="background: var(--bg-card); border-radius: 12px; overflow: hidden;">
+                    <thead style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+                        <tr>
+                            <th class="text-nowrap" style="color: var(--text-primary); padding: 1rem; font-weight: 700;">Script Name</th>
+                            <th class="text-nowrap" style="color: var(--text-primary); padding: 1rem; font-weight: 700;">Entry</th>
+                            <th class="text-nowrap" style="color: var(--text-primary); padding: 1rem; font-weight: 700;">Target</th>
+                            <th class="text-nowrap" style="color: var(--text-primary); padding: 1rem; font-weight: 700;">SL</th>
+                            <th class="text-nowrap" style="color: var(--text-primary); padding: 1rem; font-weight: 700;">Return</th>
+                            <th class="text-nowrap" style="color: var(--text-primary); padding: 1rem; font-weight: 700;">Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabularTableBody" style="border: 1px solid var(--border-color);">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content: Individual -->
+    <div class="tab-content-custom" id="individualTab">
+        <div class="cards-container px-1" id="individualCards"></div>
+    </div>
 
     <div class="bottom-nav">
         <button class="bottom-nav-item active" data-category="cash">
@@ -713,7 +1293,7 @@
                 targetPrice: "₹2,800",
                 actualExitPrice: "₹2,800",
                 profitLoss: "+14.5%",
-                profitAmount: "₹320",
+                profitAmount: "320",
                 status: "profit",
                 recommendedAt: "Jan 15, 2024 10:30 AM",
                 exitedAt: "Jan 25, 2024 02:15 PM",
@@ -721,9 +1301,9 @@
                 category: "cash",
                 isRevised: true,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹2,400", target: "₹2,700" },
-                    { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750" },
-                    { version: "2nd Revision", stopLoss: "₹2,350", target: "₹2,800" }
+                    { version: "Initial", stopLoss: "₹2,400", target: "₹2,700", revisedAt: "Jan 15, 2024 10:30 AM" },
+                    { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750", revisedAt: "Jan 18, 2024 11:00 AM" },
+                    { version: "2nd Revision", stopLoss: "₹2,350", target: "₹2,800", revisedAt: "Jan 22, 2024 09:45 AM" }
                 ]
             },
             {
@@ -735,7 +1315,7 @@
                 targetPrice: "₹1,350",
                 actualExitPrice: "₹1,560",
                 profitLoss: "-4.0%",
-                lossAmount: "₹60",
+                lossAmount: "60",
                 status: "loss",
                 recommendedAt: "Jan 13, 2024 11:45 AM",
                 exitedAt: "Jan 18, 2024 09:30 AM",
@@ -743,8 +1323,8 @@
                 category: "cash",
                 isRevised: true,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹1,580", target: "₹1,400" },
-                    { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350" }
+                    { version: "Initial", stopLoss: "₹1,580", target: "₹1,400", revisedAt: "Jan 13, 2024 11:45 AM" },
+                    { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350", revisedAt: "Jan 15, 2024 10:00 AM" }
                 ]
             },
             {
@@ -756,7 +1336,7 @@
                 targetPrice: "₹1,800",
                 actualExitPrice: "₹1,805",
                 profitLoss: "+8.2%",
-                profitAmount: "₹135",
+                profitAmount: "135",
                 status: "profit",
                 recommendedAt: "Dec 20, 2023 09:00 AM",
                 exitedAt: "Jan 05, 2024 03:45 PM",
@@ -764,7 +1344,7 @@
                 category: "cash",
                 isRevised: false,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹1,600", target: "₹1,800" }
+                    { version: "Initial", stopLoss: "₹1,600", target: "₹1,800", revisedAt: "Dec 20, 2023 09:00 AM" }
                 ]
             },
             {
@@ -776,7 +1356,7 @@
                 targetPrice: "₹380",
                 actualExitPrice: "₹382",
                 profitLoss: "+10.8%",
-                profitAmount: "₹45",
+                profitAmount: "45",
                 status: "profit",
                 recommendedAt: "Dec 10, 2023 03:30 PM",
                 exitedAt: "Dec 22, 2023 01:20 PM",
@@ -784,10 +1364,10 @@
                 category: "cash",
                 isRevised: true,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹460", target: "₹390" },
-                    { version: "1st Revision", stopLoss: "₹455", target: "₹385" },
-                    { version: "2nd Revision", stopLoss: "₹450", target: "₹382" },
-                    { version: "3rd Revision", stopLoss: "₹450", target: "₹380" }
+                    { version: "Initial", stopLoss: "₹460", target: "₹390", revisedAt: "Dec 10, 2023 03:30 PM" },
+                    { version: "1st Revision", stopLoss: "₹455", target: "₹385", revisedAt: "Dec 15, 2023 01:00 PM" },
+                    { version: "2nd Revision", stopLoss: "₹450", target: "₹382", revisedAt: "Dec 18, 2023 10:30 AM" },
+                    { version: "3rd Revision", stopLoss: "₹450", target: "₹380", revisedAt: "Dec 20, 2023 11:00 AM" }
                 ]
             },
             {
@@ -799,7 +1379,7 @@
                 targetPrice: "₹3,800",
                 actualExitPrice: "₹3,440",
                 profitLoss: "-2.8%",
-                lossAmount: "₹95",
+                lossAmount: "95",
                 status: "loss",
                 recommendedAt: "Dec 05, 2023 10:15 AM",
                 exitedAt: "Dec 10, 2023 11:30 AM",
@@ -807,7 +1387,7 @@
                 category: "cash",
                 isRevised: false,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹3,450", target: "₹3,800" }
+                    { version: "Initial", stopLoss: "₹3,450", target: "₹3,800", revisedAt: "Dec 05, 2023 10:15 AM" }
                 ]
             },
             {
@@ -819,7 +1399,7 @@
                 targetPrice: "₹180",
                 actualExitPrice: "₹185",
                 profitLoss: "+50.0%",
-                profitAmount: "₹62",
+                profitAmount: "62",
                 status: "profit",
                 recommendedAt: "Jan 10, 2024 09:30 AM",
                 exitedAt: "Jan 15, 2024 02:45 PM",
@@ -827,7 +1407,7 @@
                 category: "options",
                 isRevised: false,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹100", target: "₹180" }
+                    { version: "Initial", stopLoss: "₹100", target: "₹180", revisedAt: "Jan 10, 2024 09:30 AM" }
                 ]
             },
             {
@@ -839,7 +1419,7 @@
                 targetPrice: "₹150",
                 actualExitPrice: "₹245",
                 profitLoss: "-18.3%",
-                lossAmount: "₹38",
+                lossAmount: "38",
                 status: "loss",
                 recommendedAt: "Jan 05, 2024 11:00 AM",
                 exitedAt: "Jan 08, 2024 10:15 AM",
@@ -847,8 +1427,8 @@
                 category: "options",
                 isRevised: true,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹250", target: "₹160" },
-                    { version: "1st Revision", stopLoss: "₹240", target: "₹150" }
+                    { version: "Initial", stopLoss: "₹250", target: "₹160", revisedAt: "Jan 05, 2024 11:00 AM" },
+                    { version: "1st Revision", stopLoss: "₹240", target: "₹150", revisedAt: "Jan 06, 2024 01:00 PM" }
                 ]
             },
             {
@@ -860,7 +1440,7 @@
                 targetPrice: "₹18,600",
                 actualExitPrice: "₹18,625",
                 profitLoss: "+2.1%",
-                profitAmount: "₹385",
+                profitAmount: "385",
                 status: "profit",
                 recommendedAt: "Dec 28, 2023 10:00 AM",
                 exitedAt: "Jan 10, 2024 03:30 PM",
@@ -868,7 +1448,7 @@
                 category: "future",
                 isRevised: false,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹18,100", target: "₹18,600" }
+                    { version: "Initial", stopLoss: "₹18,100", target: "₹18,600", revisedAt: "Dec 28, 2023 10:00 AM" }
                 ]
             },
             {
@@ -880,7 +1460,7 @@
                 targetPrice: "₹41,200",
                 actualExitPrice: "₹41,180",
                 profitLoss: "+1.7%",
-                profitAmount: "₹700",
+                profitAmount: "700",
                 status: "profit",
                 recommendedAt: "Dec 22, 2023 01:00 PM",
                 exitedAt: "Jan 05, 2024 11:45 AM",
@@ -888,8 +1468,8 @@
                 category: "future",
                 isRevised: true,
                 revisions: [
-                    { version: "Initial", stopLoss: "₹42,300", target: "₹41,300" },
-                    { version: "1st Revision", stopLoss: "₹42,200", target: "₹41,200" }
+                    { version: "Initial", stopLoss: "₹42,300", target: "₹41,300", revisedAt: "Dec 22, 2023 01:00 PM" },
+                    { version: "1st Revision", stopLoss: "₹42,200", target: "₹41,200", revisedAt: "Dec 28, 2023 09:00 AM" }
                 ]
             }
         ];
@@ -901,8 +1481,9 @@
             return pastPerformance.filter(perf => perf.category === currentCategory);
         }
 
+        // Render Past Performance Cards (for individual tab)
         function renderPerformanceCards() {
-            const container = document.getElementById('performanceContainer');
+            const container = document.getElementById('individualCards');
             container.innerHTML = '';
 
             const filteredPerf = getFilteredPerformance();
@@ -922,25 +1503,27 @@
                 card.className = `performance-card ${perf.status}`;
                 card.id = `card-${perf.id}`;
 
-                // Get original and latest revision
                 const originalRevision = perf.revisions[0];
                 const latestRevision = perf.revisions[perf.revisions.length - 1];
                 const hasMultipleRevisions = perf.revisions.length > 1;
 
-                // Build revision history HTML
                 let revisionsHTML = '';
-                perf.revisions.forEach(rev => {
+                perf.revisions.forEach((rev, index) => {
+                    const isLast = index === perf.revisions.length - 1;
                     revisionsHTML += `
                         <div class="revision-item">
-                            <div class="revision-label">${rev.version}</div>
+                            <div class="revision-label" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>${rev.version}</span>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);">${rev.revisedAt || perf.recommendedAt}</span>
+                            </div>
                             <div class="revision-details">
                                 <div class="revision-row">
                                     <span class="revision-row-label">Stop Loss</span>
-                                    <span class="revision-row-value">${rev.stopLoss}</span>
+                                    <span class="revision-row-value ${!isLast ? 'text-decoration-line-through' : ''}">${rev.stopLoss}</span>
                                 </div>
                                 <div class="revision-row">
                                     <span class="revision-row-label">Target</span>
-                                    <span class="revision-row-value">${rev.target}</span>
+                                    <span class="revision-row-value ${!isLast ? 'text-decoration-line-through' : ''}">${rev.target}</span>
                                 </div>
                             </div>
                         </div>
@@ -959,9 +1542,10 @@
                         </div>
                     </div>
 
-                    <div class="buying-zone">
-                        <div class="buying-zone-label">Buying Zone</div>
-                        <div class="buying-zone-value">${perf.buyingPrice}</div>
+                    <!-- Show profit/loss per lot instead of buying zone -->
+                    <div class="completion-box ${perf.status === 'loss' ? 'loss-box' : ''}">
+                        <div class="buying-zone-label ${perf.status}">${perf.status === 'profit' ? 'Target Hit' : 'Stop Loss Hit'}</div>
+                        <div class="buying-zone-value ${perf.status}">${perf.status === 'profit' ? `Profit per lot - ₹${perf.profitAmount || '5000'}` : `Loss per lot - ₹${perf.lossAmount || '2000'}`}</div>
                     </div>
 
                     <div class="collapse-icon">
@@ -970,6 +1554,13 @@
 
                     <div class="expanded-details">
                         <div style="margin-top: 1rem;">
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-wallet"></i>
+                                    Buying Zone
+                                </span>
+                                <span class="detail-value">${perf.buyingPrice}</span>
+                            </div>
                             <div class="card-detail">
                                 <span class="detail-label">
                                     <i class="bi bi-bullseye"></i>
@@ -990,6 +1581,13 @@
                                     Exit Price
                                 </span>
                                 <span class="detail-value">${perf.actualExitPrice}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-cash-stack"></i>
+                                    ${perf.status === 'profit' ? 'Profit' : 'Loss'} per Lot
+                                </span>
+                                <span class="detail-value">${perf.status === 'profit' ? perf.profitAmount : perf.lossAmount}</span>
                             </div>
                             <div class="card-detail">
                                 <span class="detail-label">
@@ -1015,12 +1613,12 @@
                         </div>
 
                         ${hasMultipleRevisions ? `
-                            <button class="history-toggle-btn" id="history-btn-${perf.id}" onclick="toggleHistory(${perf.id})">
+                            <button class="history-toggle-btn" onclick="toggleHistory(${perf.id})">
                                 <i class="bi bi-clock-history"></i>
-                                View Revision History
-                                <i class="bi bi-chevron-down"></i>
+                                <span id="history-btn-text-${perf.id}">View Revision History</span>
+                                <i class="bi bi-chevron-down" id="history-btn-icon-${perf.id}"></i>
                             </button>
-                            <div class="revision-history-section" id="history-${perf.id}">
+                            <div class="revision-history-section collapsed" id="history-${perf.id}">
                                 <div class="revision-timeline">
                                     ${revisionsHTML}
                                 </div>
@@ -1029,9 +1627,7 @@
                     </div>
                 `;
 
-                // Add click handler to toggle expansion
                 card.addEventListener('click', (e) => {
-                    // Don't toggle if clicking on history button
                     if (e.target.closest('.history-toggle-btn')) return;
                     
                     card.classList.toggle('expanded');
@@ -1039,49 +1635,299 @@
 
                 container.appendChild(card);
             });
-
-            // Restore expanded histories
-            expandedHistories.forEach(perfId => {
-                const historySection = document.getElementById(`history-${perfId}`);
-                const button = document.getElementById(`history-btn-${perfId}`);
-                if (historySection && button) {
-                    historySection.classList.add('expanded');
-                    button.classList.add('expanded');
-                    button.innerHTML = `
-                        <i class="bi bi-clock-history"></i>
-                        Hide History
-                        <i class="bi bi-chevron-up"></i>
-                    `;
-                }
-            });
         }
 
         function toggleHistory(perfId) {
             const historySection = document.getElementById(`history-${perfId}`);
-            const button = document.getElementById(`history-btn-${perfId}`);
+            const buttonText = document.getElementById(`history-btn-text-${perfId}`);
+            const buttonIcon = document.getElementById(`history-btn-icon-${perfId}`);
             
-            if (historySection.classList.contains('expanded')) {
-                expandedHistories.delete(perfId);
-                historySection.classList.remove('expanded');
-                button.classList.remove('expanded');
-                button.innerHTML = `
-                    <i class="bi bi-clock-history"></i>
-                    View Revision History
-                    <i class="bi bi-chevron-down"></i>
-                `;
-            } else {
-                expandedHistories.add(perfId);
-                historySection.classList.add('expanded');
-                button.classList.add('expanded');
-                button.innerHTML = `
-                    <i class="bi bi-clock-history"></i>
-                    Hide History
-                    <i class="bi bi-chevron-up"></i>
-                `;
+            if (historySection && buttonText && buttonIcon) {
+                if (historySection.classList.contains('collapsed')) {
+                    historySection.classList.remove('collapsed');
+                    historySection.classList.add('expanded');
+                    buttonText.textContent = 'Hide History';
+                    buttonIcon.className = 'bi bi-chevron-up';
+                } else {
+                    historySection.classList.add('collapsed');
+                    historySection.classList.remove('expanded');
+                    buttonText.textContent = 'View Revision History';
+                    buttonIcon.className = 'bi bi-chevron-down';
+                }
             }
         }
 
-        // Bottom Navigation
+        // Render Past Performance Data for both Tabular and Individual Tabs
+        function renderPastPerformance() {
+            const tabularBody = document.getElementById('tabularTableBody');
+            const individualContainer = document.getElementById('individualCards');
+            
+            tabularBody.innerHTML = '';
+            individualContainer.innerHTML = '';
+            
+            const filtered = pastPerformance.filter(reco => reco.category === currentCategory);
+            
+            filtered.forEach(reco => {
+                // Render Tabular Row
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid var(--border-color)';
+                row.style.transition = 'background 0.2s ease';
+                row.innerHTML = `
+                    <td style="padding: 1rem; color: var(--text-primary); font-weight: 600;">${reco.script}</td>
+                    <td class="text-center" style="padding: 1rem; color: var(--text-primary);">${reco.buyingPrice}</td>
+                    <td style="padding: 1rem; color: var(--text-primary);">${reco.targetPrice}</td>
+                    <td style="padding: 1rem; color: var(--text-primary);">${reco.stopLoss}</td>
+                    <td style="padding: 1rem; color: ${reco.status === 'profit' ? 'var(--accent-buy)' : 'var(--accent-sell)'}; font-weight: 700;">${reco.profitLoss}</td>
+                    <td style="padding: 1rem; color: var(--text-primary);">${reco.duration}</td>
+                `;
+                row.addEventListener('mouseenter', () => {
+                    row.style.background = 'var(--bg-secondary)';
+                });
+                row.addEventListener('mouseleave', () => {
+                    row.style.background = 'transparent';
+                });
+                tabularBody.appendChild(row);
+                
+                // Render Individual Card (similar to index.html revised recommendations)
+                const card = document.createElement('div');
+                card.className = `reco-card ${reco.status}`; // Assuming 'reco-card' might be used elsewhere, but the main class is performance-card
+                card.id = `past_reco_${reco.id}`;
+                card.style.position = 'relative';
+                
+                const hasMultipleRevisions = reco.isRevised && reco.revisions && reco.revisions.length > 1;
+                
+                card.innerHTML = `
+                    <!-- Rotating Glow Border for completed cards -->
+                    ${reco.status === 'profit' || reco.status === 'loss' ? `
+                        <div class="rotating-border ${reco.status}"></div>
+                    ` : ''}
+                    
+                    <!-- Floating Status Indicator -->
+                    ${reco.status === 'profit' || reco.status === 'loss' ? `
+                        <div class="floating-status ${reco.status === 'profit' ? 'profit-status' : 'loss-status'}">
+                            <i class="bi ${reco.status === 'profit' ? 'bi-graph-up-arrow' : 'bi-graph-down-arrow'}"></i>
+                            <div class="status-text">${reco.status === 'profit' ? 'TARGET HIT' : 'STOP LOSS HIT'}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="card-header-custom">
+                        <div class="script-info">
+                            <div class="script-name-row">
+                                <span class="stock-name">${reco.script}</span>
+                                <span class="action-badge ${reco.action}">${reco.action.toUpperCase()}</span>
+                            </div>
+                            <div class="live-price-container">
+                                <span class="live-price" id="past_price_${reco.id}">₹${(Math.random() * 1000 + 2000).toFixed(2)}</span>
+                                <span class="live-indicator">
+                                    <span class="live-dot"></span>
+                                    Live
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${reco.status === 'profit' || reco.status === 'loss' ? `
+                        <!-- Completion Status Box -->
+                        <div class="completion-box ${reco.status === 'profit' ? '' : 'loss-box'}">
+                           ${reco.status === 'profit' ? 'Profit' : 'Loss'}: ${reco.profitLoss}
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                                <i class="bi bi-calendar-event"></i> ${reco.exitedAt}
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; cursor: pointer;">
+                                <i class="bi bi-download"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Show More Button -->
+                        <button class="show-more-btn" id="expand_btn_${reco.id}" onclick="toggleExpanded(${reco.id})">
+                            <span id="expand_text_${reco.id}">Show More</span>
+                            <i class="bi bi-chevron-down" id="expand_icon_${reco.id}"></i>
+                        </button>
+                        
+                        <!-- Expanded Details -->
+                        <div class="collapsible-content" id="expanded_${reco.id}">
+                            <div class="exit-details">
+                                <div class="exit-detail-item">
+                                    <span class="exit-detail-label">BUYING ZONE</span>
+                                    <span class="exit-detail-value">${reco.buyingPrice}</span>
+                                </div>
+                                <div class="exit-detail-item">
+                                    <span class="exit-detail-label">EXIT PRICE</span>
+                                    <span class="exit-detail-value">${reco.actualExitPrice}</span>
+                                </div>
+                                <div class="exit-detail-item">
+                                    <span class="exit-detail-label">PROFIT/LOSS</span>
+                                    <span class="exit-detail-value ${reco.status}" style="color: ${reco.status === 'profit' ? 'var(--accent-buy)' : 'var(--accent-sell)'};">
+                                        ${reco.profitLoss}
+                                    </span>
+                                </div>
+                                <div class="exit-detail-item">
+                                    <span class="exit-detail-label">PROFIT AMOUNT</span>
+                                    <span class="exit-detail-value ${reco.status}" style="color: ${reco.status === 'profit' ? 'var(--accent-buy)' : 'var(--accent-sell)'};">
+                                        ${reco.profitAmount || reco.lossAmount}
+                                    </span>
+                                </div>
+                                <div class="exit-detail-item">
+                                    <span class="exit-detail-label">EXIT DATE</span>
+                                    <span class="exit-detail-value">${reco.exitedAt}</span>
+                                </div>
+                                <div class="exit-detail-item">
+                                    <span class="exit-detail-label">DURATION</span>
+                                    <span class="exit-detail-value">${reco.duration}</span>
+                                </div>
+                            </div>
+                            
+                            ${hasMultipleRevisions ? `
+                                <!-- View Full History Button -->
+                                <button class="view-history-btn" id="history_btn_${reco.id}" onclick="toggleHistory(${reco.id})">
+                                    <span id="history_text_${reco.id}">View Full History</span>
+                                    <i class="bi bi-clock-history" id="history_icon_${reco.id}"></i>
+                                </button>
+                                
+                                <!-- Revision History -->
+                                <div class="revision-history collapsible-content" id="history_${reco.id}">
+                                    ${reco.revisions.map((rev, idx) => `
+                                        <div class="revision-item">
+                                            <div class="revision-label">
+                                                ${rev.version}
+                                                <span class="revision-timestamp">${reco.recommendedAt}</span>
+                                            </div>
+                                            <div class="revision-details">
+                                                ${rev.target ? `
+                                                    <div class="revision-detail-row">
+                                                        <span class="revision-row-label">TARGET</span>
+                                                        <span>
+                                                            ${idx > 0 ? `<span class="previous-price">${reco.revisions[idx - 1].target}</span>` : ''}
+                                                            ${rev.target}
+                                                        </span>
+                                                    </div>
+                                                ` : ''}
+                                                ${rev.stopLoss ? `
+                                                    <div class="revision-detail-row">
+                                                        <span class="revision-row-label">STOP LOSS</span>
+                                                        <span>
+                                                            ${idx > 0 ? `<span class="previous-price">${reco.revisions[idx - 1].stopLoss}</span>` : ''}
+                                                            ${rev.stopLoss}
+                                                        </span>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    ` : `
+                        <!-- Active Recommendation (not completed) -->
+                        <div class="buying-zone">
+                            <div class="buying-zone-label">Buying Zone</div>
+                            <div class="buying-zone-value">${reco.buyingPrice}</div>
+                        </div>
+                        
+                        <div class="card-body-custom">
+                            <div class="card-detail">
+                                <span class="detail-label"><i class="bi bi-box-arrow-in-down"></i> Buying Zone</span>
+                                <span class="detail-value">${reco.buyingPrice}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label"><i class="bi bi-door-open"></i> Exit Price</span>
+                                <span class="detail-value">${reco.actualExitPrice}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label"><i class="bi bi-bullseye"></i> Target</span>
+                                <span class="detail-value">${reco.targetPrice}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label"><i class="bi bi-shield-x"></i> Stop Loss</span>
+                                <span class="detail-value">${reco.stopLoss}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                                <i class="bi bi-calendar-event"></i> ${reco.recommendedAt}
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; cursor: pointer;">
+                                <i class="bi bi-download"></i>
+                            </div>
+                        </div>
+                    `}
+                `;
+                
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.history-toggle-btn')) return;
+                    
+                    card.classList.toggle('expanded');
+                });
+
+                individualContainer.appendChild(card);
+            });
+        }
+
+        // Toggle Expanded Details for Individual Cards
+        function toggleExpanded(recoId) {
+            const expanded = document.getElementById(`expanded_${recoId}`);
+            const button = document.getElementById(`expand_btn_${recoId}`);
+            const text = document.getElementById(`expand_text_${recoId}`);
+            const icon = document.getElementById(`expand_icon_${recoId}`);
+            
+            if (expanded.classList.contains('collapsed')) {
+                expanded.classList.remove('collapsed');
+                button.classList.add('expanded');
+                text.textContent = 'Show Less';
+            } else {
+                expanded.classList.add('collapsed');
+                button.classList.remove('expanded');
+                text.textContent = 'Show More';
+            }
+        }
+
+        // Toggle Revision History for Individual Cards
+        function toggleHistory(perfId) {
+            const historySection = document.getElementById(`history-${perfId}`);
+            const buttonText = document.getElementById(`history-btn-text-${perfId}`);
+            const buttonIcon = document.getElementById(`history-btn-icon-${perfId}`);
+            
+            if (historySection && buttonText && buttonIcon) {
+                if (historySection.classList.contains('collapsed')) {
+                    historySection.classList.remove('collapsed');
+                    historySection.classList.add('expanded');
+                    buttonText.textContent = 'Hide History';
+                    buttonIcon.className = 'bi bi-chevron-up';
+                } else {
+                    historySection.classList.add('collapsed');
+                    historySection.classList.remove('expanded');
+                    buttonText.textContent = 'View Revision History';
+                    buttonIcon.className = 'bi bi-chevron-down';
+                }
+            }
+        }
+
+        // Tab Switching Logic
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content-custom');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+
+                if (targetTab === 'tabular') {
+                    document.getElementById('tabularTab').classList.add('active');
+                    renderPastPerformance(); // Re-render tabular data
+                } else if (targetTab === 'individual') {
+                    document.getElementById('individualTab').classList.add('active');
+                    renderPerformanceCards(); // Re-render individual cards
+                }
+            });
+        });
+
+        // Bottom Navigation Logic
         const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
         bottomNavItems.forEach(item => {
             item.addEventListener('click', () => {
@@ -1091,11 +1937,17 @@
                 bottomNavItems.forEach(btn => btn.classList.remove('active'));
                 item.classList.add('active');
 
-                renderPerformanceCards();
+                // Re-render cards based on new category and active tab
+                const activeTab = document.querySelector('.tab-content-custom.active').id;
+                if (activeTab === 'tabularTab') {
+                    renderPastPerformance();
+                } else {
+                    renderPerformanceCards();
+                }
             });
         });
 
-        // Sidebar Toggle
+        // Sidebar Toggle Logic
         const hamburgerToggle = document.getElementById('hamburgerToggle');
         const sidebarMenu = document.getElementById('sidebarMenu');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -1116,7 +1968,7 @@
             sidebarOverlay.classList.remove('active');
         });
 
-        // Theme Toggle
+        // Theme Toggle Logic
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const sidebarThemeIcon = document.getElementById('sidebarThemeIcon');
@@ -1152,9 +2004,15 @@
             sidebarThemeIcon.className = 'bi bi-moon-fill';
         }
 
-        // Initialize
+        // Initialize on DOMContentLoaded
         document.addEventListener('DOMContentLoaded', () => {
-            renderPerformanceCards();
+            // Initial render based on default active tab and category
+            const activeTabId = document.querySelector('.tab-content-custom.active').id;
+            if (activeTabId === 'tabularTab') {
+                renderPastPerformance();
+            } else {
+                renderPerformanceCards();
+            }
         });
     </script>
 </body>
