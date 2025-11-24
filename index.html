@@ -132,7 +132,7 @@
             overflow: hidden;
         }
 
-        /* Updated to create gradient border effect on all four corners */
+        /* Gradient border on all four corners with consistent color order */
         .reco-card::before {
             content: '';
             position: absolute;
@@ -151,7 +151,7 @@
             box-shadow: 0 4px 12px var(--shadow);
         }
 
-        /* Updated profit/loss card backgrounds with bold modern design */
+        /* Updated profit card with bold gradient and shimmer animation */
         .reco-card.profit {
             background: linear-gradient(135deg, 
                 rgba(16, 185, 129, 0.15) 0%, 
@@ -167,7 +167,11 @@
             opacity: 0;
         }
 
-        /* Added animated gradient overlay for profit cards */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
         .reco-card.profit::after {
             content: '';
             position: absolute;
@@ -185,11 +189,7 @@
             pointer-events: none;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
+        /* Updated loss card with gradient and pulse animation */
         .reco-card.loss {
             background: linear-gradient(135deg, 
                 rgba(239, 68, 68, 0.15) 0%, 
@@ -205,7 +205,6 @@
             opacity: 0;
         }
 
-        /* Added subtle pulse animation for loss cards */
         .reco-card.loss::after {
             content: '';
             position: absolute;
@@ -451,6 +450,12 @@
             font-size: 0.8rem;
         }
 
+        .research-report {
+            font-size: 0.75rem;
+            margin-left: auto;
+            color: var(--text-secondary);
+        }
+
         /* Professional action badge without animations */
         .action-badge {
             padding: 0.5rem 1rem;
@@ -496,6 +501,22 @@
             color: var(--accent-primary);
         }
 
+        .buying-zone-label.profit {
+            color: var(--accent-buy);
+        }
+
+        .buying-zone-value.profit {
+            color: var(--accent-buy);
+        }
+
+        .buying-zone-label.loss {
+            color: var(--accent-sell);
+        }
+
+        .buying-zone-value.loss {
+            color: var(--accent-sell);
+        }
+
         /* Card details */
         .card-detail {
             display: flex;
@@ -526,6 +547,10 @@
             color: var(--text-primary);
             font-weight: 700;
             text-align: right;
+        }
+
+        .detail-value.small {
+            font-size: 0.75rem;        
         }
 
         .strikethrough {
@@ -566,32 +591,13 @@
             overflow: hidden;
         }
 
-        /* Added profit/loss styling for revised tab cards */
-        .revision-card.profit {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
-            border-left: 4px solid var(--accent-buy);
-        }
-
-        .revision-card.profit::before {
-            opacity: 0;
-        }
-
-        .revision-card.loss {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-card) 100%);
-            border-left: 4px solid var(--accent-sell);
-        }
-
-        .revision-card.loss::before {
-            opacity: 0;
-        }
-
-        /* Added gradient border effect on all four corners for revision cards */
+        /* Updated gradient to match reco-card order */
         .revision-card::before {
             content: '';
             position: absolute;
             inset: 0;
             padding: 3px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+            background: linear-gradient(135deg, #f59e0b, #ec4899, #8b5cf6, #3b82f6);
             border-radius: 12px;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
@@ -604,7 +610,7 @@
             box-shadow: 0 4px 12px var(--shadow);
         }
 
-        /* Updated revision cards profit/loss styling to match new design */
+        /* Updated profit styling to match reco-card exactly */
         .revision-card.profit {
             background: linear-gradient(135deg, 
                 rgba(16, 185, 129, 0.15) 0%, 
@@ -637,6 +643,7 @@
             pointer-events: none;
         }
 
+        /* Updated loss styling to match reco-card exactly */
         .revision-card.loss {
             background: linear-gradient(135deg, 
                 rgba(239, 68, 68, 0.15) 0%, 
@@ -699,7 +706,7 @@
             align-items: center;
             background: var(--bg-secondary);
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--accent-buy);
         }
@@ -831,7 +838,7 @@
         }
 
         .revision-history-section.expanded {
-            max-height: 1000px;
+            max-height: 100%;
         }
 
         /* Simplified timeline without excessive decorations */
@@ -1246,6 +1253,149 @@
                 grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
             }
         }
+
+        /* Added collapsible details section for completed recommendations */
+        .collapsible-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible-details.expanded {
+            max-height: 100%;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .show-more-btn {
+            color: var(--accent-primary); /* Changed to accent-primary */
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .show-more-btn:hover {
+            color: var(--text-primary); /* Changed to text-primary for better contrast */
+            transform: translateX(4px);
+        }
+
+        .show-more-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .show-more-btn.expanded i {
+            transform: rotate(180deg);
+        }
+
+        /* Added rotating border effect for completed recommendations */
+        .completed-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .completed-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary)); /* Placeholder, adjust gradient as needed */
+            border-radius: 12px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .profit-complete::before {
+            background: linear-gradient(135deg, var(--accent-buy), var(--accent-buy));
+        }
+
+        .loss-complete::before {
+            background: linear-gradient(135deg, var(--accent-sell), var(--accent-sell));
+        }
+
+        .completed-card:hover {
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        /* Floating status for completed recommendations */
+        .floating-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+            z-index: 2;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .profit-status {
+            background: linear-gradient(135deg, var(--accent-buy), rgba(16, 185, 129, 0.7));
+        }
+
+        .loss-status {
+            background: linear-gradient(135deg, var(--accent-sell), rgba(239, 68, 68, 0.7));
+        }
+
+        .floating-status i {
+            font-size: 1rem;
+        }
+
+        /* CHANGE: Adding styles for completion box and collapsible content */
+        .completion-box {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-buy);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            /* text-align: center; */
+            color: var(--accent-buy);
+        }
+
+        .completion-box.loss-box {
+            border-color: var(--accent-sell);
+            color: var(--accent-sell);
+        }
+
+        /* .show-more-btn {
+            color: var(--accent-primary);
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .show-more-btn:hover {
+            color: var(--accent-secondary);
+        } */
+
+        /* .collapsible-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-details.expanded {
+            max-height: 2000px;
+        } */
+
     </style>
 </head>
 <body data-theme="dark">
@@ -1266,8 +1416,14 @@
                 </button>
             </div>
 
-            <div class="col p-0 m-0 text-center">
-                <h1 class="app-title" style="font-size: calc(1.375rem + 0.5vw); margin-bottom: 0px;">The Mewa</h1>
+            <div class="col p-0 m-0 text-center text-nowrap">
+                <!-- Added logo image before The Mewa text -->
+                <h1 class="app-title" style="font-size: calc(1.375rem + 0.5vw); margin-bottom: 0px;">
+                    <img src="mewa_logo.png" 
+                         alt="Mewa Logo" 
+                         style="height: 21px; width: auto; vertical-align: middle;">
+                    The Mewa
+                </h1>
             </div>
 
             <div class="col p-0 m-0 text-end">
@@ -1369,6 +1525,10 @@
                 previousStopLoss: "₹2,400",
                 previousTarget: "₹2,700",
                 category: "cash",
+                exitPrice: "₹2820", // Added for completed status
+                exitDate: "Jan 17, 2024", // Added for completed status
+                duration: "2 days", // Added for completed status
+                profitPercentage: "12.8%", // Added for completed status
                 revisions: [
                     { version: "Original", stopLoss: "₹2,400", target: "₹2,700", timestamp: "10:30:45 AM - Jan 15, 2024", changedField: "both" }, // Added timestamps to revisions
                     { version: "1st Revision", stopLoss: "₹2,350", target: "₹2,750", timestamp: "02:15:30 PM - Jan 15, 2024", changedField: "both" },
@@ -1401,11 +1561,15 @@
                 livePrice: "₹1,560",
                 recommendedAt: "11:45:08 AM - Jan 13, 2024", // Added seconds
                 status: "loss",
-                lossAmount: "₹60",
+                lossAmount: "₹60", // Assuming lossAmount is available for display
                 isRevised: true,
                 previousStopLoss: "₹1,580",
                 previousTarget: "₹1,400",
                 category: "cash",
+                exitPrice: "1560", // Added for completed status
+                exitDate: "Jan 15, 2024", // Added for completed status
+                duration: "2 days", // Added for completed status
+                profitPercentage: "-4%", // Added for completed status
                 revisions: [
                     { version: "Original", stopLoss: "₹1,580", target: "₹1,400", timestamp: "11:45:08 AM - Jan 13, 2024", changedField: "both" },
                     { version: "1st Revision", stopLoss: "₹1,550", target: "₹1,350", timestamp: "03:20:15 PM - Jan 13, 2024", changedField: "both" }
@@ -1543,8 +1707,7 @@
         const hamburgerToggle = document.getElementById('hamburgerToggle');
         const themeToggleSwitch = document.getElementById('themeToggleSwitch');
         const body = document.body;
-
-        let currentCategory = 'cash';
+        let currentCategory = 'cash'; // Default category
 
         function getFilteredRecommendations() {
             return recommendations.filter(reco => reco.category === currentCategory);
@@ -1570,66 +1733,142 @@
             });
         }
 
-        function renderActiveRecommendations() {
+        function toggleDetails(recoId, type) {
+            const detailsSection = document.getElementById(`${type}_details_${recoId}`);
+            const button = event.currentTarget;
+            
+            if (detailsSection.classList.contains('expanded')) {
+                detailsSection.classList.remove('expanded');
+                button.innerHTML = 'Show More <i class="bi bi-chevron-down"></i>';
+            } else {
+                detailsSection.classList.add('expanded');
+                button.innerHTML = 'Show Less <i class="bi bi-chevron-up"></i>';
+            }
+        }
+
+        function renderRecommendationCard(reco) {
             const container = document.getElementById('activeRecommendations');
-            container.innerHTML = '';
+            const card = document.createElement('div');
+            
+            // if (reco.status === 'profit' || reco.status === 'loss') {
+            //     card.classList.add('completed-card');
+            //     if (reco.status === 'profit') {
+            //         card.classList.add('profit-complete');
+            //     } else {
+            //         card.classList.add('loss-complete');
+            //     }
+            // }
 
-            const filteredRecos = getFilteredRecommendations();
+            card.className = `reco-card ${reco.status}`; // Added status class for styling
+            card.id = `active_reco_${reco.id}`;
 
-            if (filteredRecos.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="bi bi-inbox"></i>
-                        <p>No active recommendations</p>
-                    </div>
-                `;
-                return;
+            if (reco.status === 'profit') {
+                card.classList.add('profit');
+            } else if (reco.status === 'loss') {
+                card.classList.add('loss');
             }
 
-            filteredRecos.forEach(reco => {
-                const card = document.createElement('div');
-                card.className = `reco-card ${reco.status}`;
-                card.id = `active_reco_${reco.id}`;
 
-                let stampHTML = '';
-                if (reco.isRevised) {
-                    stampHTML = '<div class="status-stamp revised-stamp" onclick="viewRevisedTab()" style="cursor: pointer;">REVISED</div>';
-                }
-                //  else if (reco.status === 'profit') {
-                //     stampHTML = '<div class="status-stamp profit-stamp">PROFIT</div>';
-                // } else if (reco.status === 'loss') {
-                //     stampHTML = '<div class="status-stamp loss-stamp">LOSS</div>';
-                // }
+            let stampHTML = '';
+            if (reco.isRevised) {
+                stampHTML = '<div class="status-stamp revised-stamp" onclick="viewRevisedTab()" style="cursor: pointer;">REVISED</div>';
+            }
 
-                let statusBadgesHTML = '';
-                if (reco.status === 'profit') {
-                    statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
-                }
-                if (reco.status === 'loss') {
-                    statusBadgesHTML += `<div class="status-badge loss-badge">Stop Loss Hit • ${reco.lossAmount}</div>`;
-                }
+            // let statusBadgesHTML = '';
+            // if (reco.status === 'profit') {
+            //     statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
+            // }
+            // if (reco.status === 'loss') {
+            //     statusBadgesHTML += `<div class="status-badge loss-badge">Stop Loss Hit • ${reco.lossAmount}</div>`;
+            // }
 
-                card.innerHTML = `
-                    ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
-                    
-                    <div class="card-header-custom">
-                        <div class="script-info">
-                            <div class="script-name-row">
-                                <span class="stock-name">${reco.script}</span>
+            const isCompleted = reco.status === 'profit' || reco.status === 'loss';
+
+            // ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
+            card.innerHTML = `
+                
+                <div class="card-header-custom">
+                    <div class="script-info">
+                        <div class="script-name-row">
+                            <span class="stock-name">${reco.script}</span>
+                        </div>
+                        <div class="script-name-row">
+                            <span class="live-price" id="active_price_${reco.id}">${reco.livePrice}</span>
+                            <span class="live-tag">
+                                <span class="live-dot"></span>
+                                Live
+                            </span>
+                        </div>
+                    </div>
+                    <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                </div>
+
+                ${isCompleted ? `
+                    <div class="completion-box ${reco.status === 'loss' ? 'loss-box' : ''}">                        
+                        <div class="buying-zone-label ${reco.status}">${reco.status === 'profit' ? `Target Hit` : `Stop Loss Hit`}</div>
+                        <div class="buying-zone-value ${reco.status}">${reco.status === 'profit' ? `Profit per lot - ${reco.profitAmount}` : `Loss per lot - ${reco.lossAmount}`}</div>                    
+                    </div>
+                    <div class="card-detail bg-transparent">
+                        <div class="recommended-time">
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                ${reco.recommendedAt}
+                            </span>
+                        </div>
+                        <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
+                    </div>
+                    <p class="show-more-btn mb-0 text-center" onclick="toggleDetails(${reco.id}, 'active')">
+                        Show More <i class="bi bi-chevron-down"></i>
+                    </p>
+                    <div class="collapsible-details" id="active_details_${reco.id}">                        
+                        <div class="card-body-custom">
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-wallet"></i>
+                                    Buying Zone
+                                </span>
+                                <span class="detail-value">${reco.buyingPrice}</span>
                             </div>
-                            <div class="script-name-row">
-                                <span class="live-price" id="active_price_${reco.id}">${reco.livePrice}</span>
-                                <span class="live-tag">
-                                    <span class="live-dot"></span>
-                                    Live
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-currency-rupee"></i>
+                                    Exit Price
+                                </span>
+                                <span class="detail-value">${reco.exitPrice}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-cash-stack"></i>
+                                    ${reco.status === 'profit' ? 'Profit' : 'Loss'} per Lot
+                                </span>
+                                <span class="detail-value">${reco.status === 'profit' ? reco.profitAmount : reco.lossAmount} <small class="detail-value small">(${reco.profitPercentage || '10%'})</small></span>
+                            </div>                            
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-calendar-check"></i>
+                                    Exit Date
+                                </span>
+                                <span class="detail-value">${reco.exitDate || reco.recommendedAt}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-hourglass-split"></i>
+                                    Duration
+                                </span>
+                                <span class="detail-value">${reco.duration || '5 days'}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                </span>
+                                <span class="detail-value">
+                                    <i class="bi bi-${reco.status === 'profit' ? 'graph-up-arrow text-success' : 'graph-down-arrow text-danger'}" style="font-size: 1.5rem;"></i>
                                 </span>
                             </div>
                         </div>
-                        <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
-
+                ` : `
                     <div class="buying-zone">
-                        <div class="buying-zone-label">Buying Zone</div>
+                        <div class="buying-zone-label">${reco.action === 'buy' ? 'Buying' : 'Selling'} Zone</div>
                         <div class="buying-zone-value">${reco.buyingPrice}</div>
                     </div>
 
@@ -1661,7 +1900,7 @@
                                 ${reco.recommendedAt}
                             </span>
                         </div>
-                        <i class="bi bi-download download-icon"></i>
+                        <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
                     </div>
                     
                     ${reco.isRevised ? `
@@ -1670,22 +1909,44 @@
                             <i class="bi bi-arrow-right"></i>
                         </p>
                     ` : ''}
-                `;
+                `}
+            `;
 
-                container.appendChild(card);
-                
-                if (reco !== filteredRecos[filteredRecos.length - 1]) {
-                    const separator = document.createElement('hr');
-                    separator.className = 'card-separator';
-                    container.appendChild(separator);
-                }
+            container.appendChild(card);
+            
+            if (reco !== getFilteredRecommendations()[getFilteredRecommendations().length - 1]) {
+                const separator = document.createElement('hr');
+                separator.className = 'card-separator';
+                container.appendChild(separator);
+            }
+        }
+
+        function renderActiveRecommendations() {
+            const container = document.getElementById('activeRecommendations');
+            container.innerHTML = '';
+
+            const filteredRecos = getFilteredRecommendations();
+
+            if (filteredRecos.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p>No active recommendations</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredRecos.forEach(reco => {
+                renderRecommendationCard(reco);
             });
         }
 
         function renderRevisionHistory() {
-            const container = document.getElementById('revisionHistory');
+            const container = document.getElementById('revisionHistory'); // Corrected ID
             container.innerHTML = '';
-
+            
+            // Filter recommendations based on current category and if they are revised
             const filteredRecos = getFilteredRecommendations().filter(reco => reco.isRevised);
 
             if (filteredRecos.length === 0) {
@@ -1700,22 +1961,35 @@
 
             filteredRecos.forEach(reco => {
                 const card = document.createElement('div');
-                card.className = `revision-card ${reco.status}`;
+                card.className = `revision-card ${reco.status}`; // Added status class for styling
                 card.id = `revised_reco_${reco.id}`;
 
-                let stampHTML = '';
-
-                let statusBadgesHTML = '';
                 if (reco.status === 'profit') {
-                    statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
+                    card.classList.add('profit');
+                } else if (reco.status === 'loss') {
+                    card.classList.add('loss');
                 }
-                if (reco.status === 'loss') {
-                    statusBadgesHTML += `<div class="status-badge loss-badge">Stop Loss Hit • ${reco.lossAmount}</div>`;
+
+                // const latestRevision = reco.revisions[reco.revisions.length - 1];
+                // const hasMultipleRevisions = reco.revisions.length > 1;
+
+                let stampHTML = '';
+                if (reco.isRevised) {
+                    // stampHTML = '<div class="status-stamp revised-stamp">REVISED</div>'; // Removed as it's redundant if card is in revisions tab
                 }
+
+                // let statusBadgesHTML = '';
+                // if (reco.status === 'profit') {
+                //     statusBadgesHTML += `<div class="status-badge profit-badge">Target Hit • ${reco.profitAmount}</div>`;
+                // }
+                // if (reco.status === 'loss') {
+                //     statusBadgesHTML += `<div class="status-badge loss-badge">Stop Loss Hit • ${reco.lossAmount}</div>`;
+                // }
 
                 const latestRevision = reco.revisions[reco.revisions.length - 1];
                 const originalRevision = reco.revisions[0];
-                
+                const isCompleted = reco.status === 'profit' || reco.status === 'loss';
+
                 let previousTargetPrice = null;
                 let targetRevisionNumber = 0;
                 for (let i = reco.revisions.length - 2; i >= 0; i--) {
@@ -1761,20 +2035,20 @@
                     const isLatestTarget = rev.target === latestRevision.target;
                     const isLatestStopLoss = rev.stopLoss === latestRevision.stopLoss;
                     
-                    revisionsHTML += `
-                        <div class="revision-item">
+                        revisionsHTML += `
+                            <div class="revision-item">
                             <div class="revision-label">
-                                <span>${rev.version}</span>
+                                <span>${rev.version} <i class="bi bi-download mx-2"></i></span>
                                 <span class="revision-timestamp">
-                                    <i class="bi bi-clock"></i>
-                                    ${rev.timestamp}
-                                </span>
-                            </div>
+                                        <i class="bi bi-clock"></i>
+                                        ${rev.timestamp}
+                                    </span>
+                                </div>
                             <div class="revision-details">`;
-                    
+
                     // Only show target if it was changed or if it's the original
                     if (changedField === 'both' || changedField === 'target' || index === 0) {
-                        revisionsHTML += `
+                            revisionsHTML += `
                             <div class="revision-row">
                                 <span class="revision-row-label">Target</span>
                                 <span class="revision-row-value">
@@ -1782,10 +2056,10 @@
                                     ${isLatestTarget ? rev.target : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.target}</span>`}
                                 </span>
                             </div>`;
-                    }
-                    
+                        }
+
                     if (changedField === 'both' || changedField === 'stopLoss' || index === 0) {
-                        revisionsHTML += `
+                            revisionsHTML += `
                             <div class="revision-row">
                                 <span class="revision-row-label">Stop Loss</span>
                                 <span class="revision-row-value">
@@ -1793,16 +2067,16 @@
                                     ${isLatestStopLoss ? rev.stopLoss : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.stopLoss}</span>`}
                                 </span>
                             </div>`;
-                    }
-                    
-                    revisionsHTML += `
+                        }
+
+                        revisionsHTML += `
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                 });
 
+                // ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
                 card.innerHTML = `
-                    ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
                     
                     <div class="revision-header">
                         <div class="revision-header-left">
@@ -1820,57 +2094,134 @@
                         <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
                     </div>
 
-                    <div class="revision-buying-info">
-                        <div class="revision-buying-label">Buying Zone</div>
-                        <div class="revision-buying-value">${reco.buyingPrice}</div>
-                    </div>
+                    ${isCompleted ? `
+                        <div class="completion-box ${reco.status === 'loss' ? 'loss-box' : ''}">                            
+                            <div class="buying-zone-label ${reco.status}">${reco.status === 'profit' ? `Target Hit` : `Stop Loss Hit`}</div>                            
+                            <div class="buying-zone-value ${reco.status}">${reco.status === 'profit' ? `Profit per lot - ${reco.profitAmount}` : `Loss per lot - ${reco.lossAmount}`}</div>                    
+                        </div>
+                        <div class="card-detail bg-transparent">
+                            <div class="recommended-time">
+                                <span>
+                                    <i class="bi bi-clock"></i>
+                                    ${reco.recommendedAt}
+                                </span>
+                            </div>
+                            <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
+                        </div>
+                        <p class="show-more-btn mb-0 text-center" onclick="toggleDetails(${reco.id}, 'revised')">
+                            Show More <i class="bi bi-chevron-down"></i>
+                        </p>
+                        <div class="collapsible-details" id="revised_details_${reco.id}">                            
+                            <div class="card-body-custom">
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                        <i class="bi bi-wallet"></i>
+                                        Buying Zone
+                                    </span>
+                                    <span class="detail-value">${reco.buyingPrice}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                        <i class="bi bi-currency-rupee"></i>
+                                        Exit Price
+                                    </span>
+                                    <span class="detail-value">${reco.exitPrice}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                        <i class="bi bi-cash-stack"></i>
+                                        ${reco.status === 'profit' ? 'Profit' : 'Loss'} per Lot
+                                    </span>
+                                    <span class="detail-value">${reco.status === 'profit' ? reco.profitAmount : reco.lossAmount} <small class="detail-value small">(${reco.profitPercentage || '10%'})</small></span>
+                                </div>                                
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                        <i class="bi bi-calendar-check"></i>
+                                        Exit Date
+                                    </span>
+                                    <span class="detail-value">${reco.exitDate || reco.recommendedAt}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                        <i class="bi bi-hourglass-split"></i>
+                                        Duration
+                                    </span>
+                                    <span class="detail-value">${reco.duration || '5 days'}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                    </span>
+                                    <span class="detail-value">
+                                        <i class="bi bi-${reco.status === 'profit' ? 'graph-up-arrow text-success' : 'graph-down-arrow text-danger'}" style="font-size: 1.5rem;"></i>                                        
+                                    </span>
+                                </div>
+                            </div>
+                            ${hasMultipleRevisions ? `
+                                <button class="history-toggle-btn" id="history-btn-${reco.id}" onclick="toggleHistory(${reco.id})">
+                                    <i class="bi bi-clock-history"></i>
+                                    View Full History
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+                                <div class="revision-history-section" id="history-${reco.id}">
+                                    <div class="revision-timeline">
+                                        ${revisionsHTML}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    ` : `
+                        <div class="revision-buying-info">
+                            <div class="revision-buying-label">Buying Zone</div>
+                            <div class="revision-buying-value">${reco.buyingPrice}</div>
+                        </div>
 
-                    <div class="revision-current-prices" style="position: relative;">
-                        ${stampHTML}
-                        <div class="revision-price-row">
-                            <span class="revision-price-label">
-                                <i class="bi bi-bullseye"></i>
-                                Target
-                            </span>
-                            <div class="revision-price-value">
-                                ${previousTargetPrice ? `<span class="strikethrough" style="text-decoration: line-through; opacity: 0.6; margin-right: 0.5rem;">${previousTargetPrice}</span>` : ''}
-                                ${latestRevision.target}
-                                ${previousTargetPrice && targetRevisionNumber > 0 ? `<span class="revised-text">${targetRevisionNumber}${getOrdinalSuffix(targetRevisionNumber)} Revised Target</span>` : ''}
+                        <div class="revision-current-prices" style="position: relative;">
+                            ${stampHTML}
+                            <div class="revision-price-row">
+                                <span class="revision-price-label">
+                                    <i class="bi bi-bullseye"></i>
+                                    Target
+                                </span>
+                                <div class="revision-price-value">
+                                    ${previousTargetPrice ? `<span class="strikethrough" style="text-decoration: line-through; opacity: 0.6; margin-right: 0.5rem;">${previousTargetPrice}</span>` : ''}
+                                    ${latestRevision.target}
+                                    ${previousTargetPrice && targetRevisionNumber > 0 ? `<span class="revised-text">${targetRevisionNumber}${getOrdinalSuffix(targetRevisionNumber)} Revised Target</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="revision-price-row">
+                                <span class="revision-price-label">
+                                    <i class="bi bi-shield-x"></i>
+                                    Stop Loss
+                                </span>
+                                <div class="revision-price-value">
+                                    ${previousStopLossPrice ? `<span class="strikethrough" style="text-decoration: line-through; opacity: 0.6; margin-right: 0.5rem;">${previousStopLossPrice}</span>` : ''}
+                                    ${latestRevision.stopLoss}
+                                    ${previousStopLossPrice && stopLossRevisionNumber > 0 ? `<span class="revised-text">${stopLossRevisionNumber}${getOrdinalSuffix(stopLossRevisionNumber)} Revised Stop Loss</span>` : ''}
+                                </div>
                             </div>
                         </div>
-                        <div class="revision-price-row">
-                            <span class="revision-price-label">
-                                <i class="bi bi-shield-x"></i>
-                                Stop Loss
-                            </span>
-                            <div class="revision-price-value">
-                                ${previousStopLossPrice ? `<span class="strikethrough" style="text-decoration: line-through; opacity: 0.6; margin-right: 0.5rem;">${previousStopLossPrice}</span>` : ''}
-                                ${latestRevision.stopLoss}
-                                ${previousStopLossPrice && stopLossRevisionNumber > 0 ? `<span class="revised-text">${stopLossRevisionNumber}${getOrdinalSuffix(stopLossRevisionNumber)} Revised Stop Loss</span>` : ''}
+                        <div class="card-detail bg-transparent">
+                            <div class="recommended-time">
+                                <span>
+                                    <i class="bi bi-clock"></i>
+                                    ${reco.recommendedAt}
+                                </span>
                             </div>
+                            <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
                         </div>
-                    </div>
-                    <div class="card-detail bg-transparent py-0 mb-0">
-                        <div class="revision-time">
-                            <span>
-                                <i class="bi bi-clock"></i>
-                                ${reco.recommendedAt}
-                            </span>
-                        </div>
-                        <i class="bi bi-download download-icon"></i>
-                    </div>
-                    ${hasMultipleRevisions ? `
-                        <button class="history-toggle-btn" id="history-btn-${reco.id}" onclick="toggleHistory(${reco.id})">
-                            <i class="bi bi-clock-history"></i>
-                            View Full History
-                            <i class="bi bi-chevron-down"></i>
-                        </button>
-                        <div class="revision-history-section" id="history-${reco.id}">
-                            <div class="revision-timeline">
-                                ${revisionsHTML}
+                        ${hasMultipleRevisions ? `
+                            <button class="history-toggle-btn" id="history-btn-${reco.id}" onclick="toggleHistory(${reco.id})">
+                                <i class="bi bi-clock-history"></i>
+                                View Full History
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                            <div class="revision-history-section" id="history-${reco.id}">
+                                <div class="revision-timeline">
+                                    ${revisionsHTML}
+                                </div>
                             </div>
-                        </div>
-                    ` : ''}
+                        ` : ''}
+                    `}
                 `;
 
                 container.appendChild(card);
@@ -1952,11 +2303,11 @@
             if (newTheme === 'dark') {
                 themeIcon.className = 'bi bi-moon-stars-fill';
                 sidebarThemeIcon.className = 'bi bi-moon-fill';
-                themeToggleSwitch.style.transform = 'translateX(0)';
+                // themeToggleSwitch.style.transform = 'translateX(0)'; // Handled by CSS variables
             } else {
                 themeIcon.className = 'bi bi-sun-fill';
                 sidebarThemeIcon.className = 'bi bi-sun-fill';
-                themeToggleSwitch.style.transform = 'translateX(24px)';
+                // themeToggleSwitch.style.transform = 'translateX(24px)'; // Handled by CSS variables
             }
             localStorage.setItem('theme', newTheme);
         });
@@ -1998,11 +2349,11 @@
             if (newTheme === 'dark') {
                 themeIcon.className = 'bi bi-moon-stars-fill';
                 sidebarThemeIcon.className = 'bi bi-moon-fill';
-                themeToggleSwitch.style.transform = 'translateX(0)';
+                // themeToggleSwitch.style.transform = 'translateX(0)'; // Handled by CSS variables
             } else {
                 themeIcon.className = 'bi bi-sun-fill';
                 sidebarThemeIcon.className = 'bi bi-sun-fill';
-                themeToggleSwitch.style.transform = 'translateX(24px)';
+                // themeToggleSwitch.style.transform = 'translateX(24px)'; // Handled by CSS variables
             }
             localStorage.setItem('theme', newTheme);
         });
