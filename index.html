@@ -161,6 +161,7 @@
             box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25);
             position: relative;
             overflow: hidden;
+            padding-bottom: 0.60rem !important;
         }
 
         .reco-card.profit::before {
@@ -199,6 +200,7 @@
             box-shadow: 0 8px 32px rgba(239, 68, 68, 0.25);
             position: relative;
             overflow: hidden;
+            padding-bottom: 0.60rem !important;
         }
 
         .reco-card.loss::before {
@@ -620,6 +622,7 @@
             box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25);
             position: relative;
             overflow: hidden;
+            padding-bottom: 0.60rem !important;
         }
 
         .revision-card.profit::before {
@@ -653,6 +656,7 @@
             box-shadow: 0 8px 32px rgba(239, 68, 68, 0.25);
             position: relative;
             overflow: hidden;
+            padding-bottom: 0.60rem !important;
         }
 
         .revision-card.loss::before {
@@ -1519,6 +1523,8 @@
                 targetPrice: "₹2,800",
                 livePrice: "₹2,820",
                 recommendedAt: "10:30:45 AM - Jan 15, 2024", // Added seconds
+                recommendedAtTime: "10:30:45 AM",
+                recommendedAtDate: "Jan 15, 2024",
                 status: "profit",
                 profitAmount: "₹320",
                 isRevised: true,
@@ -1544,6 +1550,8 @@
                 targetPrice: "₹3,900",
                 livePrice: "₹3,680",
                 recommendedAt: "02:15:22 PM - Jan 14, 2024", // Added seconds
+                recommendedAtTime: "02:15:22 PM",
+                recommendedAtDate: "Jan 14, 2024",
                 status: "active",
                 isRevised: false,
                 category: "cash",
@@ -1560,6 +1568,8 @@
                 targetPrice: "₹1,350",
                 livePrice: "₹1,560",
                 recommendedAt: "11:45:08 AM - Jan 13, 2024", // Added seconds
+                recommendedAtTime: "11:45:08 AM",
+                recommendedAtDate: "Jan 13, 2024",
                 status: "loss",
                 lossAmount: "₹60", // Assuming lossAmount is available for display
                 isRevised: true,
@@ -1584,6 +1594,8 @@
                 targetPrice: "₹1,800",
                 livePrice: "₹1,720",
                 recommendedAt: "09:00:33 AM - Jan 16, 2024", // Added seconds
+                recommendedAtTime: "09:00:33 AM",
+                recommendedAtDate: "Jan 16, 2024",
                 status: "active",
                 isRevised: false,
                 category: "cash",
@@ -1600,6 +1612,8 @@
                 targetPrice: "₹380",
                 livePrice: "₹415",
                 recommendedAt: "03:30:50 PM - Jan 12, 2024", // Added seconds
+                recommendedAtTime: "03:30:50 PM",
+                recommendedAtDate: "Jan 12, 2024",
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹460",
@@ -1621,6 +1635,8 @@
                 targetPrice: "₹180",
                 livePrice: "₹145",
                 recommendedAt: "09:30:12 AM - Jan 17, 2024", // Added seconds
+                recommendedAtTime: "09:30:12 AM",
+                recommendedAtDate: "Jan 17, 2024",
                 status: "active",
                 isRevised: false,
                 category: "options",
@@ -1637,6 +1653,8 @@
                 targetPrice: "₹150",
                 livePrice: "₹190",
                 recommendedAt: "11:00:55 AM - Jan 16, 2024", // Added seconds
+                recommendedAtTime: "11:00:55 AM",
+                recommendedAtDate: "Jan 16, 2024",
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹250",
@@ -1656,6 +1674,8 @@
                 targetPrice: "₹18,750",
                 livePrice: "₹18,520",
                 recommendedAt: "10:00:28 AM - Jan 15, 2024", // Added seconds
+                recommendedAtTime: "10:00:28 AM",
+                recommendedAtDate: "Jan 15, 2024",
                 status: "active",
                 isRevised: false,
                 category: "future",
@@ -1672,6 +1692,8 @@
                 targetPrice: "₹41,500",
                 livePrice: "₹41,800",
                 recommendedAt: "01:00:37 PM - Jan 14, 2024", // Added seconds
+                recommendedAtTime: "01:00:37 PM",
+                recommendedAtDate: "Jan 14, 2024",
                 status: "active",
                 isRevised: true,
                 previousStopLoss: "₹42,600",
@@ -1691,6 +1713,8 @@
                 targetPrice: "₹145",
                 livePrice: "₹135",
                 recommendedAt: "02:30:44 PM - Jan 17, 2024", // Added seconds
+                recommendedAtTime: "02:30:44 PM",
+                recommendedAtDate: "Jan 17, 2024",
                 status: "active",
                 isRevised: false,
                 category: "cash",
@@ -1786,37 +1810,19 @@
 
             // ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
             card.innerHTML = `
-                
-                <div class="card-header-custom">
-                    <div class="script-info">
-                        <div class="script-name-row">
-                            <span class="stock-name">${reco.script}</span>
-                        </div>
-                        <div class="script-name-row">
-                            <span class="live-price" id="active_price_${reco.id}">${reco.livePrice}</span>
-                            <span class="live-tag">
-                                <span class="live-dot"></span>
-                                Live
-                            </span>
-                        </div>
-                    </div>
-                    <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
-                </div>
-
                 ${isCompleted ? `
+                    <div class="card-header-custom">
+                        <div class="script-info">
+                            <div class="script-name-row">
+                                <span class="stock-name">${reco.script}</span>
+                            </div>                            
+                        </div>
+                        <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                    </div>
                     <div class="completion-box ${reco.status === 'loss' ? 'loss-box' : ''}">                        
                         <div class="buying-zone-label ${reco.status}">${reco.status === 'profit' ? `Target Hit` : `Stop Loss Hit`}</div>
                         <div class="buying-zone-value ${reco.status}">${reco.status === 'profit' ? `Profit per lot - ${reco.profitAmount}` : `Loss per lot - ${reco.lossAmount}`}</div>                    
-                    </div>
-                    <div class="card-detail bg-transparent">
-                        <div class="recommended-time">
-                            <span>
-                                <i class="bi bi-clock"></i>
-                                ${reco.recommendedAt}
-                            </span>
-                        </div>
-                        <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
-                    </div>
+                    </div>                    
                     <p class="show-more-btn mb-0 text-center" onclick="toggleDetails(${reco.id}, 'active')">
                         Show More <i class="bi bi-chevron-down"></i>
                     </p>
@@ -1846,6 +1852,13 @@
                             <div class="card-detail">
                                 <span class="detail-label">
                                     <i class="bi bi-calendar-check"></i>
+                                    Recommended On
+                                </span>
+                                <span class="detail-value">${reco.recommendedAtDate}</span>
+                            </div>
+                            <div class="card-detail">
+                                <span class="detail-label">
+                                    <i class="bi bi-calendar-check"></i>
                                     Exit Date
                                 </span>
                                 <span class="detail-value">${reco.exitDate || reco.recommendedAt}</span>
@@ -1859,14 +1872,33 @@
                             </div>
                             <div class="card-detail">
                                 <span class="detail-label">
+                                    <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
                                 </span>
                                 <span class="detail-value">
-                                    <i class="bi bi-${reco.status === 'profit' ? 'graph-up-arrow text-success' : 'graph-down-arrow text-danger'}" style="font-size: 1.5rem;"></i>
+                                    <div class="d-flex align-items-center">
+                                        <span class="pe-2">${reco.profitPercentage || '10%'}</span>
+                                        <i class="bi bi-${reco.status === 'profit' ? 'arrow-up-circle-fill text-success' : 'arrow-down-circle-fill text-danger'}" style="font-size: 1.5rem;"></i>
+                                    </div>
                                 </span>
                             </div>
                         </div>
                     </div>
                 ` : `
+                    <div class="card-header-custom">
+                        <div class="script-info">
+                            <div class="script-name-row">
+                                <span class="stock-name">${reco.script}</span>
+                            </div>
+                            <div class="script-name-row">
+                                <span class="live-price" id="active_price_${reco.id}">${reco.livePrice}</span>
+                                <span class="live-tag">
+                                    <span class="live-dot"></span>
+                                    Live
+                                </span>
+                            </div>
+                        </div>
+                        <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                    </div>
                     <div class="buying-zone">
                         <div class="buying-zone-label">${reco.action === 'buy' ? 'Buying' : 'Selling'} Zone</div>
                         <div class="buying-zone-value">${reco.buyingPrice}</div>
@@ -2052,7 +2084,7 @@
                             <div class="revision-row">
                                 <span class="revision-row-label">Target</span>
                                 <span class="revision-row-value">
-                                    ${prevRev ? `<span style="font-size: 0.8rem; opacity: 0.5; text-decoration: line-through; margin-right: 0.5rem;">${prevRev.target}</span>` : ''}
+                                    ${prevRev ? `<span class="strikethrough" style="font-size: 0.8rem; opacity: 0.5; text-decoration: line-through; margin-right: 0.5rem;">${prevRev.target}</span>` : ''}
                                     ${isLatestTarget ? rev.target : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.target}</span>`}
                                 </span>
                             </div>`;
@@ -2063,7 +2095,7 @@
                             <div class="revision-row">
                                 <span class="revision-row-label">Stop Loss</span>
                                 <span class="revision-row-value">
-                                    ${prevRev ? `<span style="font-size: 0.8rem; opacity: 0.5; text-decoration: line-through; margin-right: 0.5rem;">${prevRev.stopLoss}</span>` : ''}
+                                    ${prevRev ? `<span class="strikethrough" style="font-size: 0.8rem; opacity: 0.5; text-decoration: line-through; margin-right: 0.5rem;">${prevRev.stopLoss}</span>` : ''}
                                     ${isLatestStopLoss ? rev.stopLoss : `<span style="text-decoration: line-through; opacity: 0.6;">${rev.stopLoss}</span>`}
                                 </span>
                             </div>`;
@@ -2076,38 +2108,20 @@
                 });
 
                 // ${statusBadgesHTML ? `<div class="status-badges">${statusBadgesHTML}</div>` : ''}
-                card.innerHTML = `
-                    
-                    <div class="revision-header">
-                        <div class="revision-header-left">
-                            <div class="revision-script-row">
-                                <span class="revision-script-name">${reco.script}</span>
-                            </div>
-                            <div class="revision-script-row">
-                                <span class="revision-live-price" id="revised_price_${reco.id}">${reco.livePrice}</span>
-                                <span class="live-tag">
-                                    <span class="live-dot"></span>
-                                    Live
-                                </span>
-                            </div>
-                        </div>
-                        <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
-                    </div>
-
+                card.innerHTML = `                    
                     ${isCompleted ? `
+                        <div class="revision-header">
+                            <div class="revision-header-left">
+                                <div class="revision-script-row">
+                                    <span class="revision-script-name">${reco.script}</span>
+                                </div>                                
+                            </div>
+                            <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                        </div>
                         <div class="completion-box ${reco.status === 'loss' ? 'loss-box' : ''}">                            
                             <div class="buying-zone-label ${reco.status}">${reco.status === 'profit' ? `Target Hit` : `Stop Loss Hit`}</div>                            
                             <div class="buying-zone-value ${reco.status}">${reco.status === 'profit' ? `Profit per lot - ${reco.profitAmount}` : `Loss per lot - ${reco.lossAmount}`}</div>                    
-                        </div>
-                        <div class="card-detail bg-transparent">
-                            <div class="recommended-time">
-                                <span>
-                                    <i class="bi bi-clock"></i>
-                                    ${reco.recommendedAt}
-                                </span>
-                            </div>
-                            <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
-                        </div>
+                        </div>                        
                         <p class="show-more-btn mb-0 text-center" onclick="toggleDetails(${reco.id}, 'revised')">
                             Show More <i class="bi bi-chevron-down"></i>
                         </p>
@@ -2133,14 +2147,21 @@
                                         ${reco.status === 'profit' ? 'Profit' : 'Loss'} per Lot
                                     </span>
                                     <span class="detail-value">${reco.status === 'profit' ? reco.profitAmount : reco.lossAmount} <small class="detail-value small">(${reco.profitPercentage || '10%'})</small></span>
-                                </div>                                
+                                </div>             
+                                <div class="card-detail">
+                                    <span class="detail-label">
+                                        <i class="bi bi-calendar-check"></i>
+                                        Recommended On
+                                    </span>
+                                    <span class="detail-value">${reco.recommendedAtDate}</span>
+                                </div>
                                 <div class="card-detail">
                                     <span class="detail-label">
                                         <i class="bi bi-calendar-check"></i>
                                         Exit Date
                                     </span>
                                     <span class="detail-value">${reco.exitDate || reco.recommendedAt}</span>
-                                </div>
+                                </div>                                                   
                                 <div class="card-detail">
                                     <span class="detail-label">
                                         <i class="bi bi-hourglass-split"></i>
@@ -2150,9 +2171,13 @@
                                 </div>
                                 <div class="card-detail">
                                     <span class="detail-label">
+                                        <span class="research-report mt-2">Research report </span><i class="bi bi-download download-icon"></i>
                                     </span>
                                     <span class="detail-value">
-                                        <i class="bi bi-${reco.status === 'profit' ? 'graph-up-arrow text-success' : 'graph-down-arrow text-danger'}" style="font-size: 1.5rem;"></i>                                        
+                                        <div class="d-flex align-items-center">
+                                            <span class="pe-2">${reco.profitPercentage || '10%'}</span>
+                                            <i class="bi bi-${reco.status === 'profit' ? 'arrow-up-circle-fill text-success' : 'arrow-down-circle-fill text-danger'}" style="font-size: 1.5rem;"></i>
+                                        </div>
                                     </span>
                                 </div>
                             </div>
@@ -2170,8 +2195,23 @@
                             ` : ''}
                         </div>
                     ` : `
-                        <div class="revision-buying-info">
-                            <div class="revision-buying-label">Buying Zone</div>
+                        <div class="revision-header">
+                            <div class="revision-header-left">
+                                <div class="revision-script-row">
+                                    <span class="revision-script-name">${reco.script}</span>
+                                </div>
+                                <div class="revision-script-row">
+                                    <span class="revision-live-price" id="revised_price_${reco.id}">${reco.livePrice}</span>
+                                    <span class="live-tag">
+                                        <span class="live-dot"></span>
+                                        Live
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="action-badge ${reco.action}">${reco.action.toUpperCase()}</div>
+                        </div>
+                        <div class="revision-buying-info">                            
+                            <div class="revision-buying-label">${reco.action === 'buy' ? 'Buying' : 'Selling'} Zone</div>
                             <div class="revision-buying-value">${reco.buyingPrice}</div>
                         </div>
 
